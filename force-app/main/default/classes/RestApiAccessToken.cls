@@ -1,6 +1,6 @@
 public class RestApiAccessToken {
     public static void getAccessToken(){
-        
+        /*
         String endpoint='https://login.salesforce.com/services/oauth2/token';
         
         String username = ' ushaugar@gmail'; 
@@ -8,7 +8,7 @@ public class RestApiAccessToken {
         String ClientId= '3MVG9WVXk15qiz1Le7GbJNg3jtTMln7Xcl1eCcTgMIl8232FbGxnEIA6Huvs8wMcROeDJO8yak_Y.Kwn1H55R';
         String ClientSecret = 'DCCC0663D3B4F703154A384944ACFF390A471FEAC929B01494B93C44BE817D51'; 
         String loginUrl     = 'https://login.salesforce.com/';
-        
+        */
         /*Httprequest req = new HttpRequest();    
         req.setMethod('POST');    
         //req.setHeader('Content-Type','application/json');
@@ -46,7 +46,9 @@ public class RestApiAccessToken {
                          return res1.getBody();
          }*/
      
-		// --- Build OAuth token request ---
+		// --- Build OAuth token request --- //
+        /*
+
         HttpRequest req = new HttpRequest();
         req.setEndpoint(loginUrl + '/services/oauth2/token');
         req.setMethod('POST');
@@ -71,5 +73,7 @@ public class RestApiAccessToken {
         } else {
             System.debug('Failed: ' + res.getStatus());
         }
+        */
     }
+        
 }
