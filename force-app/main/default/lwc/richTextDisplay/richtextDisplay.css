@@ -1,0 +1,12 @@
+/* richTextDisplay.css */
+.rich-text-container {
+    max-height: 100px;
+    overflow-y: auto;
+    word-break: break-word;
+}
+
+.rich-text-container p {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}

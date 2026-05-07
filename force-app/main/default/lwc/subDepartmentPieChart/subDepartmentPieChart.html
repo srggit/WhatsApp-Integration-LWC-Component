@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+        <div class="header-container slds-grid slds-p-around_medium slds-align_absolute-center slds-justify-between">
+            <h2 class="slds-text-heading_medium">Sub-Departmental Budget</h2>
+            <lightning-combobox
+                name="department"
+                value={selectedDepartmentId}
+                options={departmentOptions}
+                onchange={handleDepartmentChange}
+                class="filter-combobox"
+                variant="label-hidden">
+            </lightning-combobox>
+        </div>
+
+        <div class="chart-container slds-p-around_medium">
+            <canvas></canvas>
+        </div>
+    </lightning-card>
+</template>

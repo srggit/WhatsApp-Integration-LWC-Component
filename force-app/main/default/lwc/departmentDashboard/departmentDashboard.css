@@ -1,0 +1,339 @@
+/* Budget Circle Styles */
+.circle {     
+    border-radius: 100%;     
+    width: 100px;     
+    height: 100px;     
+    display: flex;     
+    justify-content: center;     
+    align-items: center;     
+    margin: 0 auto 0.5rem auto; 
+}  
+
+.circle.success {     
+    background-color: #28a745;     
+    color: white; 
+}  
+
+.circle.gray {     
+    background-color: #eee;     
+    color: #333; 
+}  
+
+/* Main container - ensures perfect alignment */
+.uniform-chart-container {
+    display: flex;
+    margin-top: -10px;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: stretch; /* Makes all cards same height */
+}
+
+/* Each card - identical dimensions */
+
+.uniform-chart-card {
+    flex: 1 1 30%; /* wider cards */
+    max-width: 32%;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 185px;
+    margin: 10px 6px;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 0.75rem;
+    cursor: pointer;
+
+    border: 1px solid #d8dde6;
+}
+
+.uniform-chart-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #f4f6f9;
+    
+}
+
+/* Chart circle - consistent size */
+.chart-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 1rem;
+    flex-shrink: 0; /* Prevents shrinking */
+}
+
+.chart-circle::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Color variations - same as before */
+.chart-circle.given {
+    background: linear-gradient(135deg, #56cc9d 0%, #4caf50 100%);
+}
+.chart-circle.given::before {
+    background: linear-gradient(135deg, #66d6a6 0%, #5cbf60 100%);
+}
+.chart-circle.utilized {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+}
+.chart-circle.utilized::before {
+    background: linear-gradient(135deg, #ffb1b4 0%, #fce0da 100%);
+}
+.chart-circle.percentage {
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+.chart-circle.percentage::before {
+    background: linear-gradient(135deg, #b1d1ff 0%, #d2f1ff 100%);
+}
+
+/* Text styles */
+.chart-inner {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+.chart-amount {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.chart-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #032d60;
+    margin-top: auto; /* Pushes title to bottom */
+}
+
+/* Responsive - stack vertically on small screens */
+@media (max-width: 768px) {
+    .uniform-chart-container {
+        flex-direction: column;
+    }
+    .uniform-chart-card {
+        height: auto;
+        min-height: 180px;
+        width: 100%;
+    }
+}
+
+.slds-box {     
+    min-height: 180px; 
+    background: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 0.75rem;
+    cursor: pointer;
+
+    border: 1px solid #d8dde6;
+
+  
+} 
+
+.slds-box:hover {     
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+     background-color: #f4f6f9;
+}   
+
+/* Team Grid Layout */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Uniform Team Card Styles */
+.team-card-container {
+    width: 100%;
+}
+
+.team-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: 295px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.team-card:hover {
+    
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+    background-color: #f4f6f9;
+}
+
+/* Uniform Team Tag */
+.team-tag {
+    background-color: #7c4dff;
+    color: white;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+    text-align: center;
+    max-width: fit-content;
+    flex-shrink: 0;
+}
+
+/* Team Details */
+.team-details {
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+    margin-bottom: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    min-height: 18px;
+}
+
+.detail-label {
+    color: #666;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #333;
+    text-align: right;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Button Container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    height: 40px;
+    margin-top: auto;
+}
+
+.view-details-btn {
+    --slds-c-button-brand-color-background: #0070d2;
+    --slds-c-button-brand-color-border: #0070d2;
+    --slds-c-button-brand-color-text: white;
+    width: 100%;
+    max-width: 120px;
+}
+
+/* Create Team Card */
+.create-team-card {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    border: 2px dashed #0070d2;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.create-team-card:hover {
+    background-color: #e3f2fd;
+    border-color: #0056b3;
+}
+
+.create-team-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.create-team-icon {
+    font-size: 2.5rem;
+    color: #0070d2;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.create-team-text {
+    font-size: 1rem;
+    color: #0070d2;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .team-card {
+        height: 300px;
+        min-height: 300px;
+    }
+}
+.spinner-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disabled-card {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: #f8f8f8;
+}
+
+.custom-modal-header {
+    background-color: #0070d2; /* Salesforce Blue */
+    color: white;
+    padding: 1rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+.custom-box {
+    background-color: #f3f3f3;
+    border-radius: 0.5rem;
+}
+.custom-modal-size {
+    max-width: 60rem;
+    width: 60%;        
+    height: 40rem;
+}

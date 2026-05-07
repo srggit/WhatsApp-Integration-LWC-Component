@@ -1,0 +1,673 @@
+<template>
+    <div class="margin">
+    <lightning-card class="form-card">
+        <div class="form-container">        
+            <div class="header-section">                
+                <img src={logoUrl1} alt="Left Logo" class="header-logo left-logo" />
+                <img src={logoUrl2} alt="Right Logo" class="header-logo right-logo" />                
+            </div>
+             <!-- Header -->
+            <h2 class="application-header">APPLICATION FORM</h2>
+
+            <!-- APPLICANT'S DETAILS -->
+            <h2 >APPLICANT'S DETAILS</h2>
+            <div class="section slds-grid slds-wrap">
+                <!-- Left Side: Form Fields -->
+                <div class="slds-size_2-of-3  slds-p-right_small slds-p-bottom_small">
+                    <!-- <lightning-input label="Name:" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small">
+                        <label class="boldname-label">Name:</label>
+                        <label class="lightname-label">Mr/Mrs/Ms/Dr</label>
+                        <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>
+
+                    <!-- <lightning-input label="Son/Daughter/Wife of" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small">                       
+                        <label class="lightname-label">Son/Daughter/Wife of:</label>
+                        <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>
+
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="Mobile No 1." type="tel"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Mobile No 1.:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="No 2." type="tel"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Mobile No 2.:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="Email ID" type="email"></lightning-input> -->
+                             <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Email ID:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="email"></lightning-input>
+                            </div>
+                            
+                        </div>
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="Date of Birth" type="date"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Date of Birth:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="date"></lightning-input>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-p-top_small">
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="PAN No." type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">PAN CARD No.:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div> 
+                        </div>
+                        <div class="slds-col slds-p-top_small">
+                            <!-- <lightning-input label="Aadhaar No." type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Aadhaar No.:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Enlarged Upload Photo -->
+                <div class="slds-size_1-of-3 slds-p-left_small slds-p-top_small slds-p-bottom_small photo-section">
+                    <div class="photo-upload-box">
+                        <lightning-input class="signature-input" label="Upload Photo" type="file" accept="image/*"
+                            onchange={handlePhotoUpload}></lightning-input>
+                     </div> 
+                     
+                </div>
+
+
+                <!-- Full Width Additional Fields -->
+                <div class="slds-size_1-of-1   slds-p-bottom_small">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Occupation" type="text"></lightning-input> -->
+                             <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Occupation:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>
+                            
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Name of Company" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row">                       
+                                <label class="lightname-label">Name of Company:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>
+                        </div>
+                    </div>  
+                    
+                    <div class="slds-p-top_small">
+                        <label class="boldname-label">Industry/Functions:</label><br/>
+                        <div class="industry-row slds-p-top_xx-small ">
+                            <lightning-input type="radio" label="IT" name="industryGroup" value="IT"></lightning-input>
+                            <lightning-input type="radio" label="Sales & Marketing" name="industryGroup" value="Sales & Marketing"></lightning-input>
+                            <lightning-input type="radio" label="HR & Admin" name="industryGroup" value="HR & Admin"></lightning-input>
+                            <lightning-input type="radio" label="Finance" name="industryGroup" value="Finance"></lightning-input>
+                            <lightning-input type="radio" label="Production" name="industryGroup" value="Production"></lightning-input>
+                        </div>
+                        <div class="industry-row">
+                            <lightning-input type="radio" label="Legal" name="industryGroup" value="Legal"></lightning-input>
+                            <lightning-input type="radio" label="Operation" name="industryGroup" value="Operation"></lightning-input>
+                            <lightning-input type="radio" label="Business" name="industryGroup" value="Business"></lightning-input>
+                            <lightning-input type="radio" label="Others" name="industryGroup" value="Others"></lightning-input>
+                        </div>
+                    </div>
+                                      
+                    <div class="slds-p-top_small">
+                        <label class="boldname-label">Annual Income:</label><br/>
+                        <div class="income-row slds-p-top_xx-small">
+                            <lightning-input type="radio" label="5–15 Lakhs" name="incomeGroup" value="5-15"></lightning-input>
+                            <lightning-input type="radio" label="15–25 Lakhs" name="incomeGroup" value="15-25"></lightning-input>
+                            <lightning-input type="radio" label="25–50 Lakhs" name="incomeGroup" value="25-50"></lightning-input>
+                            <lightning-input type="radio" label="50 Lakhs & Above" name="incomeGroup" value="50plus"></lightning-input>
+                        </div>
+                    </div>                 
+                                     
+                   
+                    <!-- <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small">
+                        <div class="slds-col">
+                            <lightning-input label="Aadhar Card:"  type="file"></lightning-input>                            
+                        </div>
+                        <div class="slds-col">
+                            <lightning-input label="Pan Card:"  type="file"></lightning-input>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-input label="PassPort Copy(For NRI):"  type="file"></lightning-input>
+                        </div>
+                    </div> -->
+                    <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small">
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Aadhar Card:</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openAadharFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Aadhar Card">
+                                </div>
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Pan Card:</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openPanFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Pan Card">
+                                </div>
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Passport Copy (For NRI):</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openPassportFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Passport Copy (For NRI)">
+                                </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CO-APPLICANT'S DETAILS -->
+            <template for:each={coApplicants} for:item="applicant" for:index="index">
+                <div key={applicant.id} class="co-applicant-block slds-m-bottom_medium">
+                    <!-- CO-APPLICANT'S DETAILS -->                  
+                    <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                        <h2>CO-APPLICANT'S DETAILS</h2>
+                        <template if:true={hasMultipleCoApplicants}>
+                            <lightning-button 
+                                variant="destructive-text" 
+                                label="Remove" 
+                                title="Remove this Co-Applicant"
+                                onclick={removeCoApplicant}
+                                data-id={applicant.id}>
+                            </lightning-button>
+                        </template>
+                    </div>
+                    <div class="section slds-grid slds-wrap">
+                        <!-- Left Side: Form Fields -->
+                        <div class="slds-size_2-of-3  slds-p-right_small ">
+                            <!-- <lightning-input label="Name:" type="text" value={applicant.name}></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                <label class="boldname-label">Name:</label>
+                                <label class="lightname-label">Mr/Mrs/Ms/Dr</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text" value={applicant.name}></lightning-input>
+                            </div>
+                            <!-- <lightning-input label="Son/Daughter/Wife of" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                <label class="lightname-label">Son/Daughter/Wife of</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                            </div>
+
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Mobile No 1." type="tel"></lightning-input> -->
+                                     <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Mobile No 1.:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="tel" ></lightning-input>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="No 2." type="tel"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Mobile No 2.:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="tel" ></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Email ID" type="email"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Email ID:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="email" ></lightning-input>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Date of Birth" type="date"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Date of Birth:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="date" ></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slds-grid slds-gutters slds-p-top_small">
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="PAN No." type="text"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">PAN CARD No.:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Aadhaar No." type="text"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Aadhaar No.:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Upload Photo -->
+                        <div class="slds-size_1-of-3 slds-p-left_small slds-p-top_small ">
+                            
+                            <div class="photo-upload-box">
+                                <lightning-input class="signature-input" label="Upload Photo" type="file" accept="image/*"></lightning-input>
+                            </div>
+                        </div>
+
+                        <!-- Full Width Additional Fields -->
+                        <div class="slds-size_1-of-1   slds-p-bottom_small">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Occupation" type="text"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Occupation:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-p-top_small">
+                                    <!-- <lightning-input label="Name of Company" type="text"></lightning-input> -->
+                                    <div class="slds-grid  name-row">
+                                        <label class="lightname-label">Name of Company:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="slds-p-top_small">
+                                <label class="boldname-label">Industry/Functions:</label><br />
+                                <div class="industry-row slds-p-top_xx-small">
+                                    <lightning-input type="radio" label="IT" name={applicant.industryGroupName} value="IT"></lightning-input>
+                                    <lightning-input type="radio" label="Sales & Marketing" name={applicant.industryGroupName} value="Sales & Marketing"></lightning-input>
+                                    <lightning-input type="radio" label="HR & Admin" name={applicant.industryGroupName} value="HR & Admin"></lightning-input>
+                                    <lightning-input type="radio" label="Finance" name={applicant.industryGroupName} value="Finance"></lightning-input>
+                                    <lightning-input type="radio" label="Production" name={applicant.industryGroupName} value="Production"></lightning-input>
+                                </div>
+                                <div class="industry-row">
+                                    <lightning-input type="radio" label="Legal" name={applicant.industryGroupName} value="Legal"></lightning-input>
+                                    <lightning-input type="radio" label="Operation" name={applicant.industryGroupName} value="Operation"></lightning-input>
+                                    <lightning-input type="radio" label="Business" name={applicant.industryGroupName} value="Business"></lightning-input>
+                                    <lightning-input type="radio" label="Others" name={applicant.industryGroupName} value="Others"></lightning-input>
+                                </div>
+                            </div>
+
+                            <div class="slds-p-top_small">
+                                <label class="boldname-label">Annual Income:</label><br />
+                                <div class="income-row slds-p-top_xx-small">
+                                    <lightning-input type="radio" label="5–15 Lakhs" name={applicant.incomeGroupName} value="5-15"></lightning-input>
+                                    <lightning-input type="radio" label="15–25 Lakhs" name={applicant.incomeGroupName} value="15-25"></lightning-input>
+                                    <lightning-input type="radio" label="25–50 Lakhs" name={applicant.incomeGroupName} value="25-50"></lightning-input>
+                                    <lightning-input type="radio" label="50 Lakhs & Above" name={applicant.incomeGroupName} value="50plus"></lightning-input>
+                                </div>
+                            </div>
+
+                           
+
+                            <!-- <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small">
+                                <div class="slds-col">
+                                    <lightning-input label="Aadhar Card:" type="file"></lightning-input>
+                                </div>
+                                <div class="slds-col">
+                                    <lightning-input label="Pan Card:" type="file"></lightning-input>
+                                </div>
+                                <div class="slds-col">
+                                    <lightning-input label="Passport Copy (For NRI):" type="file"></lightning-input>
+                                </div>
+                            </div> -->
+                            <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small">
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Aadhar Card:</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openAadharFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Aadhar Card">
+                                </div>
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Pan Card:</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openPanFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Pan Card">
+                                </div>
+                                <div class="slds-col file-upload-col">
+                                    <span class="file-label">Passport Copy (For NRI):</span>
+                                    <button class="slds-button slds-button_neutral" onclick={openPassportFilePicker}>
+                                        Choose File
+                                    </button>
+                                    <input type="file" class="hidden-file" onchange={handleFileChange} data-label="Passport Copy (For NRI)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <div class="slds-align_left slds-m-top_medium">
+                <lightning-button  label="Click Here to Add Co-Applicant" onclick={addCoApplicant}></lightning-button>
+            </div>           
+
+            <!-- COMMUNICATION ADDRESS -->
+            <h2>COMMUNICATION ADDRESS</h2>
+            <div class="section">
+                <div class="row">
+                    <lightning-input label="Line 1" type="text"></lightning-input>
+                    <lightning-input label="Line 2" type="text"></lightning-input>
+                </div>                
+                 <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <!-- <lightning-input label="City" type="text"></lightning-input>  -->
+                             <div class="slds-grid  name-row">
+                                        <label class="lightname-label">City:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                             </div>                          
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="State" type="text"></lightning-input> -->
+                             <div class="slds-grid  name-row">
+                                        <label class="lightname-label">State:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                             </div>
+                           
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="ZIP/PIN Code" type="text"></lightning-input> -->
+                             <div class="slds-grid  name-row">
+                                        <label class="lightname-label">ZIP/PIN Code:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                             </div>                            
+                        </div>
+                    </div>                
+               
+                <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small ">
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Passport No." type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row">
+                                            <label class="lightname-label">Passport No.:</label>
+                                            <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                        </div>  
+                    </div>
+
+                    <div class="slds-col">
+                        <label>Nationality:</label><br/>
+                                <div class="nation-row">
+                                    <lightning-input type="radio" label="Indian" name="nationGroup" value="Indian" ></lightning-input>
+                                    <lightning-input type="radio" label="POI" name="nationGroup" value="POI"></lightning-input>
+                                    <lightning-input type="radio" label="NRI" name="nationGroup" value="NRI"></lightning-input>
+                                    <lightning-input type="radio" label="OCI" name="nationGroup" value="OCI"></lightning-input>
+                                </div>
+                    </div>
+                                       
+                </div>
+            </div>
+
+            <!-- PERMANENT ADDRESS -->
+            <h2 >PERMANENT ADDRESS</h2>
+            <div class="section">
+                <lightning-input type="checkbox" label="Same as communication address"></lightning-input>
+                <div class="row">
+                    <lightning-input label="Line 1" type="text"></lightning-input>
+                    <lightning-input label="Line 2" type="text"></lightning-input>
+                </div>               
+                 <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <!-- <lightning-input label="City" type="text"></lightning-input> -->
+                             <div class="slds-grid  name-row">
+                                        <label class="lightname-label">City:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                             </div>
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="State" type="text"></lightning-input> -->
+                              <div class="slds-grid  name-row">
+                                        <label class="lightname-label">State:</label>
+                                        <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                              </div>
+                           
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="ZIP/PIN Code" type="text"></lightning-input>-->
+                             <div class="slds-grid  name-row">
+                                   <label class="lightname-label">ZIP/PIN Code:</label>
+                                   <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                            </div>                         
+                        </div>
+                 </div>                
+                
+                <div class="slds-grid slds-gutters slds-p-top_small slds-p-bottom_small">
+                    <div class="slds-col ">
+                        <!-- <lightning-input label="Passport No." type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row">
+                                <label class="lightname-label">Passport No.:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text" ></lightning-input>
+                        </div>  
+                    </div>
+                    
+                    <div class="slds-col">
+                        <label>Nationality:</label><br/>
+                                <div class="nation-row">
+                                    <lightning-input type="radio" label="Indian" name="nationGroup" value="Indian" ></lightning-input>
+                                    <lightning-input type="radio" label="POI" name="nationGroup" value="POI"></lightning-input>
+                                    <lightning-input type="radio" label="NRI" name="nationGroup" value="NRI"></lightning-input>
+                                    <lightning-input type="radio" label="OCI" name="nationGroup" value="OCI"></lightning-input>
+                                </div>
+                    </div>
+                                       
+                </div>
+
+            </div>
+
+            <!-- PROPERTY DETAILS -->
+            <h2 class="application-header">PROPERTY DETAILS</h2>
+            <div class="section">
+
+                <div class="row">
+                    <!-- <lightning-input label="Project Name:" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small">
+                        <label class="lightname-label">Project Name:</label>                        
+                        <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>
+                    <!-- <lightning-input label="RERA NO.:" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_xx-small">
+                        <label class="lightname-label">RERA NO.:</label>
+                        <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Flat No.:" type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row slds-p-top_small">
+                            <label class="lightname-label">Flat No.:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                        </div>
+                    </div>                   
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Built-up Area:" type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row slds-p-top_small">
+                            <label class="lightname-label">Built-up Area:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Carpet Area:" type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row slds-p-top_small">
+                            <label class="lightname-label">Carpet Area:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                        </div>
+                    </div>                   
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Basic Cost:" type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row slds-p-top_small">
+                                <label class="lightname-label">Basic Cost:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                        </div>
+                     </div>   
+                    <div class="slds-col">
+                        <!-- <lightning-input label="Booking Amount" type="text"></lightning-input> -->
+                        <div class="slds-grid  name-row slds-p-top_small">
+                                <label class="lightname-label">Booking Amount:</label>
+                                <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col">
+                    <!-- <lightning-input label="Cheque/DD/Wire transfer No.:" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small slds-p-bottom_small">
+                            <label class="lightname-label">Cheque/DD/Wire transfer No.:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>
+                  </div>
+                  <div class="slds-col">
+                    <!-- <lightning-input label="Dated:" type="date"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small slds-p-bottom_small">
+                            <label class="lightname-label">Dated:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="date"></lightning-input>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <!-- TERMS -->
+            <h2>TERMS AND CONDITIONS</h2>
+            <div class="terms-box">
+                <template if:true={termsText}>
+                    <lightning-formatted-rich-text value={termsText}></lightning-formatted-rich-text>
+                </template>
+                <template if:false={termsText}>
+                    <p>Loading terms and conditions...</p>
+                </template>
+            </div>
+
+            <!-- SIGNATURE -->
+             <h2>DIGITAL SIGNATURE LINK</h2>
+            <div class="row ">
+                <lightning-input class="signature-input" label="Signature of Applicant" type="text"></lightning-input>
+                <lightning-input class="signature-input" label="Signature of Co-applicant" type="text"></lightning-input>                
+            </div>
+            <div class="row">
+                <lightning-input label="Date" type="date"></lightning-input>                
+                <lightning-input label="Place" type="text"></lightning-input>
+            </div>
+
+             <!-- Source DETAILS -->
+            <!-- <h2>SOURCE DETAILS</h2> -->
+             <h2 class="application-header">SOURCE DETAILS</h2>
+            <div class="section">               
+                <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Project Name:" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="boldname-label">Project Name:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                           
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Flat No.:" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Flat No.:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                           
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Booking Dated" type="date"></lightning-input>  -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Booking Dated:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="date"></lightning-input>
+                            </div>                           
+                        </div>
+                    </div>              
+               
+                <div class="slds-p-top_small">
+                  <label class="sourceboldname-label">Source:</label><br/>
+                        <div class="source-row">
+                            <lightning-input type="radio" label="Marketing" name="nationGroup" value="Marketing" ></lightning-input>
+                            <lightning-input type="radio" label="Referral" name="nationGroup" value="Referral"></lightning-input>
+                            <lightning-input type="radio" label="Channel Partner" name="nationGroup" value="Channel Partner"></lightning-input>                            
+                        </div>
+                </div>               
+                <div class="slds-p-top_small slds-p-left_medium">
+                  <label>Marketing:</label><br/>
+                        <div class="marketing-row">
+                            <lightning-input type="radio" label="Site Walk-in" name="marketGroup" value="Site Walk-in" ></lightning-input>
+                            <lightning-input type="radio" label="Hoarding" name="marketGroup" value="Hoarding"></lightning-input>
+                            <lightning-input type="radio" label="Website" name="marketGroup" value="Website"></lightning-input>
+                            <lightning-input type="radio" label="Online Portal" name="marketGroup" value="Online Portal"></lightning-input>
+                        </div>
+                </div>                
+                <div class="slds-grid slds-gutters slds-p-top_small slds-p-left_medium">
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Name of the Referee:" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Name of the Referee:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                       
+                            <!-- <lightning-input label="Name of the Channel Partner:" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Name of the Channel Partner:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                           
+                        </div>                        
+                         <div class="slds-col">
+                            <lightning-input class="signature-input" label="Seal & Signature" type="text"></lightning-input>
+                        </div>
+                </div>
+
+                <div class="slds-grid slds-gutters slds-p-top_small">
+                        <div class="slds-col side-row slds-p-top_small"> 
+                            <p class="rera">Existing Nambiar Client:</p>                            
+                            <lightning-input  type="checkbox" ></lightning-input>                                                      
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Project:" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Project:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                            
+                        </div>
+                        <div class="slds-col">
+                            <!-- <lightning-input label="Unit" type="text"></lightning-input> -->
+                            <div class="slds-grid  name-row slds-p-top_small">
+                                    <label class="lightname-label">Unit:</label>
+                                    <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                            </div>                             
+                        </div>
+                </div>
+                <div class="row">
+                    <!-- <lightning-input label="Name of RM:" type="text"></lightning-input> -->
+                    <div class="slds-grid  name-row slds-p-top_small">
+                            <label class="lightname-label">Name of RM:</label>
+                            <lightning-input class="name-input" variant="label-hidden" type="text"></lightning-input>
+                    </div>                
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="action-buttons">
+                <lightning-button variant="brand" label="Save and Preview" ></lightning-button>
+                <lightning-button variant="brand" label="Save and Submit" ></lightning-button>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-section">
+                <p class="company-name">NAMBIAR ENSEMBLERESIDENTIAL PROJECTS LLP</p>
+                <p class="rera">RERA: PRM/KA/RERA/1251/308/PR/100125/007377</p>
+                <p class="company-address">2nd floor, P.R. Business Centre, Above Croma, Outer Ring Road,
+                    Kadubisanahalli,</p>
+                <p class="company-address">Marathahalli (PO) Bengaluru - 560 103. Ph.: +91 8066 696 000</p>
+            </div>
+        </div>
+    </lightning-card>
+</div>
+</template>

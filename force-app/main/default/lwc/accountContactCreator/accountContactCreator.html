@@ -1,0 +1,123 @@
+<template>
+    <lightning-card title="Create Account & Contact" icon-name="standard:account">
+        <div class="slds-var-p-around_medium">
+            <!-- Account Section -->
+            <div class="slds-text-heading_small slds-var-m-bottom_small">Account Information</div>
+            
+            <lightning-input
+                label="Account Name"
+                name="accountName"
+                value={accountName}
+                onchange={handleInputChange}
+                required
+                class="slds-var-m-bottom_small"
+            ></lightning-input>
+
+            <lightning-input
+                label="Account Website"
+                name="accountWebsite"
+                type="url"
+                value={accountWebsite}
+                onchange={handleInputChange}
+                class="slds-var-m-bottom_medium"
+            ></lightning-input>
+
+            <!-- Contact Section -->
+            <div class="slds-text-heading_small slds-var-m-bottom_small slds-var-m-top_medium">
+                Contact Information
+            </div>
+
+            <lightning-input
+                label="Contact First Name"
+                name="contactFirstName"
+                value={contactFirstName}
+                onchange={handleInputChange}
+                required
+                class="slds-var-m-bottom_small"
+            ></lightning-input>
+
+            <lightning-input
+                label="Contact Last Name"
+                name="contactLastName"
+                value={contactLastName}
+                onchange={handleInputChange}
+                required
+                class="slds-var-m-bottom_small"
+            ></lightning-input>
+
+            <lightning-input
+                label="Contact Email"
+                name="contactEmail"
+                type="email"
+                value={contactEmail}
+                onchange={handleInputChange}
+                required
+                class="slds-var-m-bottom_small"
+            ></lightning-input>
+
+            <lightning-input
+                label="Contact Phone Number"
+                name="contactPhone"
+                type="tel"
+                value={contactPhone}
+                onchange={handleInputChange}
+                class="slds-var-m-bottom_medium"
+            ></lightning-input>
+
+            <!-- File Upload Section -->
+            <div class="slds-text-heading_small slds-var-m-bottom_small slds-var-m-top_medium">
+                Attachment
+            </div>
+
+            <lightning-input
+                label="Upload File"
+                type="file"
+                name="fileUpload"
+                onchange={handleFileChange}
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+                class="slds-var-m-bottom_medium"
+            ></lightning-input>
+
+            <template if:true={fileName}>
+                <div class="slds-text-body_small slds-var-m-bottom_medium">
+                    Selected File: <strong>{fileName}</strong>
+                </div>
+            </template>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div slot="footer" class="slds-clearfix">
+            <div class="slds-float_right">
+                <lightning-button
+                    label="Cancel"
+                    variant="neutral"
+                    onclick={handleCancel}
+                    class="slds-var-m-right_x-small"
+                ></lightning-button>
+
+                <lightning-button
+                    label="Save & New"
+                    variant="brand"
+                    onclick={handleSaveAndNew}
+                    disabled={isLoading}
+                    class="slds-var-m-right_x-small"
+                ></lightning-button>
+
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    onclick={handleSave}
+                    disabled={isLoading}
+                ></lightning-button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <lightning-spinner
+                alternative-text="Loading"
+                size="medium"
+            ></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

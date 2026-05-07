@@ -1,0 +1,135 @@
+<apex:page controller="AccountManagerController" showHeader="false" sidebar="false" docType="html-5.0" applyHtmlTag="false" applyBodyTag="false">
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body ng-app="sfApp" ng-controller="AccountCtrl" class="p-3">
+    <!-- Create Account side-by-side inputs -->
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <input type="text" ng-model="newAccountName" placeholder="New Account Name" class="form-control" style="width: 200px;" />
+        <input type="text" ng-model="newAccountEmail" placeholder="New Account Email" class="form-control" style="width: 200px;" />
+        <button ng-click="createAccount()" class="btn btn-primary">Create</button>
+    </div>
+
+    <!-- Accounts list table with inline edit -->
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr><th>Name</th><th>Email</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="account in accounts">
+                <td>
+                    <span ng-if="!account.editing">{{account.Name}}</span>
+                    <input type="text" ng-model="account.Name" class="form-control" ng-if="account.editing"/>
+                </td>
+                <td>
+                    <span ng-if="!account.editing">{{account.Email__c}}</span>
+                    <input type="text" ng-model="account.Email__c" class="form-control" ng-if="account.editing"/>
+                </td>
+                <td>
+                    <button ng-if="!account.editing" ng-click="editMode(account)" class="btn btn-warning btn-sm mr-2">Edit</button>
+                    <button ng-if="account.editing" ng-click="saveAccount(account)" class="btn btn-success btn-sm mr-2">Save</button>
+                    <button ng-if="account.editing" ng-click="cancelEdit(account)" class="btn btn-secondary btn-sm mr-2">Cancel</button>
+                    <button ng-click="deleteAccount(account)" class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Toast Notification -->
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; min-width: 250px; z-index: 1050;">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+            <div class="toast-header bg-success text-white">
+                <strong class="mr-auto">Success</strong>
+                <small>Now</small>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close" ng-click="closeToast()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                Account created successfully!
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    var app = angular.module('sfApp', []);
+    app.controller('AccountCtrl', function($scope) {
+        // Load accounts from server
+        $scope.accounts = JSON.parse('{!JSENCODE(accountsJSON)}');
+        $scope.newAccountName = '';
+        $scope.newAccountEmail = '';
+
+        // Create Account
+        $scope.createAccount = function() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.AccountManagerController.createAccount}',
+                $scope.newAccountName, $scope.newAccountEmail,
+                function(result, event) {
+                    if (event.status) {
+                        $scope.accounts.push(result);
+                        $scope.$apply();
+                        $scope.newAccountName = '';
+                        $scope.newAccountEmail = '';
+                        $scope.showToastThenReload();
+                    }
+                }
+            );
+        };
+        // Show toast then reload page after hiding
+        $scope.showToastThenReload = function() {
+            $('#successToast').toast('show');
+            $('#successToast').on('hidden.bs.toast', function () {
+                window.location.reload();
+            });
+        };
+        $scope.closeToast = function() {
+            $('#successToast').toast('hide');
+        };
+
+        // Edit mode
+        $scope.editMode = function(account) {
+            account.editing = true;
+            // Save original for potential cancel (optional)
+            account._originalName = account.Name;
+            account._originalEmail=account.Email__c;
+        };
+        // Save account
+        $scope.saveAccount = function(account) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.AccountManagerController.updateAccount}',
+                account.Id, account.Name,account.Email__C,
+                function(result, event) {
+                    if (event.status) {
+                        account.editing = false;
+                        $scope.$apply();
+                    }
+                }
+            );
+        };
+        // Cancel edit
+        $scope.cancelEdit = function(account) {
+            account.Name = account._originalName;
+            account.Email__C = account._originalEmail;
+            account.editing = false;
+        };
+        // Delete account
+        $scope.deleteAccount = function(account) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.AccountManagerController.deleteAccount}',
+                account.Id,
+                function(result, event) {
+                    if (event.status) {
+                        var index = $scope.accounts.indexOf(account);
+                        $scope.accounts.splice(index, 1);
+                        $scope.$apply();
+                    }
+                }
+            );
+        };
+    });
+</script>
+</apex:page>

@@ -1,0 +1,13 @@
+.custom-modal-header {
+    background-color: #0070d2;
+    color: white;
+    border-bottom: none;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-footer-bg {
+    background-color: #d5dfe9; 
+    border-top: 1px solid #d8dde6; /* Optional: adds top border like native SLDS modals */
+}

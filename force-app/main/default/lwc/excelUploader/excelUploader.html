@@ -1,0 +1,6 @@
+<template>
+  <lightning-card title="Import Accounts and Contacts">
+    <lightning-input type="file" accept=".xlsx" label="Upload Excel" onchange={handleFileChange}></lightning-input>
+    <lightning-button label="Import" onclick={importToSalesforce} class="slds-m-top_medium"></lightning-button>
+  </lightning-card>
+</template>

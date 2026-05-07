@@ -1,0 +1,265 @@
+/* Make table header blue */
+.slds-table thead tr th {
+    background-color: #6293ea !important; /* Light Salesforce blue */
+    color: white !important;
+    font-weight: 600;
+    border: 1px solid #d8dde6;
+}
+
+/* Add spacing between header columns */
+.slds-table thead tr th > .slds-truncate {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Optional: add spacing between cells in body (for visual consistency) */
+.slds-table tbody tr td {
+    padding: 0.75rem 1rem;
+}
+
+/* Optional: add space below table */
+.slds-box.slds-m-bottom_small {
+    margin-bottom: 1rem;
+}
+
+/* HEADER: Add border-right between columns */
+.slds-table thead th {
+    background-color: #6293ea !important;
+    color: white !important;
+    font-weight: 600;
+    border-right: 1px solid #d8dde6; /* Vertical lines */
+}
+
+/* Remove last column’s right border to avoid double lines */
+.slds-table thead th:last-child {
+    border-right: none;
+}
+
+/* BODY: Add vertical separation between columns */
+.slds-table tbody td {
+    border-right: 1px solid #ececec;
+    padding: 0.85rem 1rem;
+    background-color: #ffffff;
+}
+
+/* Remove last td’s border for each row */
+.slds-table tbody td:last-child {
+    border-right: none;
+}
+
+/* Optional: add bottom border between rows */
+.slds-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+
+/* Remove truncation from headers and cells */
+.slds-truncate {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+}
+
+/* Optional: Make table cells wrap content */
+.slds-table th,
+.slds-table td {
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 1rem;
+    vertical-align: top;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Remove last column's right border */
+.slds-table th:last-child,
+.slds-table td:last-child {
+    border-right: none;
+}
+
+/* Make table header blue */
+.slds-table thead th {
+    background-color: #6293ea !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Optional: Set table to take full width */
+.slds-table {
+    width: 100%;
+    table-layout: auto; /* Allows content to define column width */
+}
+.scroll-wrapper-both {
+    max-height: 400px;
+    max-width: 100%;
+    overflow: auto;
+}
+
+
+/* Main container - ensures perfect alignment */
+.uniform-chart-container {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: stretch; /* Makes all cards same height */
+}
+
+/* Each card - identical dimensions */
+.uniform-chart-card {
+    flex: 1 1 0px; 
+    min-width: 0; 
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 185px;
+    margin: 10px 3px;
+    margin-left: 10px;
+}
+
+/* Chart circle - consistent size */
+.chart-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 1rem;
+    flex-shrink: 0; /* Prevents shrinking */
+}
+
+.chart-circle::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Color variations - same as before */
+.chart-circle.given {
+    background: linear-gradient(135deg, #56cc9d 0%, #4caf50 100%);
+}
+.chart-circle.given::before {
+    background: linear-gradient(135deg, #66d6a6 0%, #5cbf60 100%);
+}
+.chart-circle.utilized {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+}
+.chart-circle.utilized::before {
+    background: linear-gradient(135deg, #ffb1b4 0%, #fce0da 100%);
+}
+.chart-circle.percentage {
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+.chart-circle.percentage::before {
+    background: linear-gradient(135deg, #b1d1ff 0%, #d2f1ff 100%);
+}
+
+/* Text styles */
+.chart-inner {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+.chart-amount {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.chart-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #032d60;
+    margin-top: auto; /* Pushes title to bottom */
+}
+
+/* Responsive - stack vertically on small screens */
+@media (max-width: 768px) {
+    .uniform-chart-container {
+        flex-direction: column;
+    }
+    .uniform-chart-card {
+        height: auto;
+        min-height: 180px;
+        width: 100%;
+    }
+}
+
+.budget-detail-view {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    background: white;
+    border-radius: 1px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+.minheight{
+    min-height: 645px;
+}
+
+.white-background {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+/* Scrollable wrapper */
+.scrollable-schedule {
+    max-height: 220px; /* Adjust height as needed */
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Optional scrollbar styling */
+.scrollable-schedule::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollable-schedule::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.editable-cell {
+    cursor: pointer;
+    color: #0070d2;
+    text-decoration: underline;
+}
+
+.custom-modal-header {
+    background-color: #0070d2; /* Salesforce Blue */
+    color: white;
+    padding: 1rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+.custom-modal-size {
+    max-width: 60rem;
+    width: 50%;        
+    height: 40rem;
+    
+}
+.fixed-header-table .slds-scrollable_y {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.fixed-header-table .slds-scrollable_x {
+    overflow-x: auto;
+}
+
+.fixed-header-table table {
+    table-layout: fixed;
+}

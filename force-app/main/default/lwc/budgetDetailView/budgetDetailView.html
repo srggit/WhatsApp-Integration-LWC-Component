@@ -1,0 +1,327 @@
+<template>
+    <div class="budget-detail-view">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="dept-info">
+                    <lightning-icon icon-name="standard:account" class="dept-icon"></lightning-icon>
+                    <div>
+                        <div class="dept-name">{budgetDetails.departmentName}</div>
+                        <div class="dept-type">Department</div>
+                    </div>
+                </div>
+                <lightning-button-icon icon-name="utility:close" size="large" alternative-text="Close"
+                    onclick={handleBackToList} variant="bare">
+                </lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="data-section">
+            <div class="data-header">
+                <span>Total Budget Alloted</span>
+                <span>Utilized Budget</span>
+                <span> Utilized</span>
+                <span>Financial Year</span>
+                <span>Department Head</span>
+            </div>
+            <div class="data-row">
+                <span>₹{budgetDetails.totalBudget}</span>
+                <span>₹{budgetDetails.utilizedBudget}</span>
+                <span>{budgetDetails.utilizedPercentage}%</span>
+                <span>{budgetDetails.financialYear}</span>
+                <span>{budgetDetails.departmentHead}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-wrap slds-grid_align">
+        <div class="slds-col slds-size_7-of-12 slds-p-right_x-medium">
+            <div class="budget-detail-view minheight">
+                <!-- Tabs -->
+                <lightning-tabset>
+                    <lightning-tab label="Business Goals">
+                        <div class="slds-p-around_medium">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr class="custom-header-row">
+                                        <th scope="col" class="custom-header-cell">
+                                            <div class="slds-truncate">Objective</div>
+                                        </th>
+                                        <th scope="col" class="custom-header-cell custom-header-divider">
+                                            <div class="slds-truncate">Outcome</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div lwc:dom="manual" class="rich-text-cell" data-id="objective"></div>
+                                        </td>
+                                        <td>
+                                            <div lwc:dom="manual" class="rich-text-cell" data-id="outcome"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </lightning-tab>
+
+                    <lightning-tab label="Utilization">
+                        <div class="slds-p-around_medium">
+                            <template if:true={childDepartments}>
+                                <div class="utilization-section">
+
+                                    <!-- Department Dropdown List -->
+                                    <div class="department-dropdown-container">
+                                        <template for:each={childDepartments} for:item="dept">
+                                            <div key={dept.Id} class="department-dropdown-item">
+                                                <div class={dept.triggerClass} onclick={handleDropdownToggle}
+                                                    data-dept-id={dept.Id}>
+                                                    <lightning-button-icon icon-name={dept.iconName}
+                                                        alternative-text="Toggle" size="x-small"
+                                                        class="dropdown-toggle-icon" data-dept-id={dept.Id}>
+                                                    </lightning-button-icon>
+                                                    <span class="department-name">{dept.Name}</span>
+                                                </div>
+
+                                                <!-- Dropdown Content -->
+                                                <template if:true={dept.isExpanded}>
+                                                    <div class="dropdown-content slds-p-around_medium">
+                                                        <!-- Charts Section -->
+                                                        <div class="budget-charts-container">
+                                                            <!-- Budget Given -->
+                                                            <div class="uniform-chart-card">
+                                                                <div class="chart-circle given">
+                                                                    <div class="chart-inner">
+                                                                        <div class="chart-amount">
+                                                                            ₹{dept.formattedAmount}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="chart-title">Budget Given</div>
+                                                            </div>
+
+                                                            <!-- Utilized Budget -->
+                                                            <div class="uniform-chart-card">
+                                                                <div class="chart-circle utilized">
+                                                                    <div class="chart-inner">
+                                                                        <div class="chart-amount">
+                                                                            {dept.displayUtilizedAmount}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="chart-title">Utilized Budget</div>
+                                                            </div>
+
+
+                                                            <!-- Percentage Utilized -->
+                                                            <div class="uniform-chart-card">
+                                                                <div class="chart-circle percentage">
+                                                                    <div class="chart-inner">
+                                                                        <div class="chart-amount">
+                                                                            {dept.displayUtilizedPercentage}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="chart-title">Utilized Budget %</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Yearly Activities Table -->
+                                                        <!-- Replace the existing table section in your template with this wrapped version -->
+                                                        <div class="yearly-activities-section">
+                                                            <h3 class="activities-title">Yearly Activities</h3>
+                                                            <template if:true={dept.proposals}>
+                                                                <template if:true={dept.proposals.length}>
+                                                                    <!-- Add this wrapper div around the table -->
+                                                                    <div class="activities-table-wrapper">
+                                                                        <table class="activities-table">
+                                                                            <thead>
+                                                                                <tr class="activities-header-row">
+                                                                                    <th class="activities-header-cell">
+                                                                                        Name</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Asked Budget</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Approved Budget</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Expected Revenue</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Actual Revenue</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Tentative Date</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Team Member</th>
+                                                                                    <th
+                                                                                        class="activities-header-cell activities-header-divider">
+                                                                                        Expected Outcome</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <template
+                                                                                    for:each={dept.displayedProposals}
+                                                                                    for:item="proposal">
+                                                                                    <tr key={proposal.Id}
+                                                                                        class="activities-row">
+                                                                                        <td class="activities-cell">
+                                                                                            {proposal.Name}</td>
+                                                                                        <td class="activities-cell">
+                                                                                            ₹{proposal.formattedBudget}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            ₹{proposal.formattedApprovedBudget}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            ₹{proposal.formattedExpectedRevenue}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            ₹{proposal.formattedActualRevenue}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            {proposal.formattedDate}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            {proposal.teamMemberName}
+                                                                                        </td>
+                                                                                        <td class="activities-cell">
+                                                                                            <div class="outcome-cell"
+                                                                                                lwc:dom="manual"
+                                                                                                data-proposal-id={proposal.Id}>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </template>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <!-- End of wrapper div -->
+
+                                                                    <template if:true={dept.showViewAllButton}>
+                                                                        <div class="view-all-container">
+                                                                            <a class="view-all-link"
+                                                                                onclick={handleViewAll}
+                                                                                data-dept-id={dept.Id}>
+                                                                                View All >
+                                                                            </a>
+                                                                        </div>
+                                                                    </template>
+                                                                </template>
+                                                                <template if:false={dept.proposals.length}>
+                                                                    <div class="no-activities">
+                                                                        <p>No Records Found</p>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                            <template if:false={dept.proposals}>
+                                                                <div class="no-activities">
+                                                                    <p>No Records Found</p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={childDepartments}>
+                                <div class="slds-text-align_center slds-p-around_large">
+                                    <p class="slds-text-color_weak">No child departments found for utilization.</p>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-tab>
+
+                    <lightning-tab label="Budget Plan Requests">
+                        <c-sub-departmental-budget-approval record-id={budgetId} onrefreshparent={handleRefreshParent}>
+                        </c-sub-departmental-budget-approval>
+                    </lightning-tab>
+                </lightning-tabset>
+            </div>
+        </div>
+
+        <div class="slds-col slds-size_5-of-12 slds-p-right_x-small">
+            <div class="uniform-chart-container">
+                <!-- Budget Given -->
+                <div class="uniform-chart-card">
+                    <div class="chart-circle given">
+                        <div class="chart-inner">
+                            <div class="chart-amount">₹{budgetDetails.totalBudget}</div>
+                        </div>
+                    </div>
+                    <div class="chart-title">Budget Given</div>
+                </div>
+
+                <!-- Utilized Budget -->
+                <div class="uniform-chart-card">
+                    <div class="chart-circle utilized">
+                        <div class="chart-inner">
+                            <div class="chart-amount">₹{budgetDetails.utilizedBudget}</div>
+                        </div>
+                    </div>
+                    <div class="chart-title">Utilized Budget</div>
+                </div>
+
+                <!-- Percentage Utilized -->
+                <div class="uniform-chart-card">
+                    <div class="chart-circle percentage">
+                        <div class="chart-inner">
+                            <div class="chart-amount">{budgetDetails.utilizedPercentage}%</div>
+                        </div>
+                    </div>
+                    <div class="chart-title">Utilized Budget %</div>
+                </div>
+            </div>
+
+            <!-- Upcoming Schedule Section with proper container and title -->
+            <div class="upcoming-schedule-container">
+                <div class="upcoming-schedule-header">
+                    <h3 class="upcoming-schedule-title">Upcoming Schedule</h3>
+                </div>
+
+                <div class="upcoming-schedule-content">
+                    <template if:true={upcomingSchedule}>
+                        <template if:true={upcomingSchedule.length}>
+                            <template for:each={displayedSchedule} for:item="schedule">
+                                <div key={schedule.Id} class="schedule-item">
+                                    <div class="schedule-icon">
+                                        <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+                                    </div>
+                                    <div class="schedule-details">
+                                        <div class="schedule-name">{schedule.Name}</div>
+                                        <div class="schedule-department">{schedule.departmentName}</div>
+                                        <div class="schedule-date">{schedule.formattedDate}</div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={showScheduleViewAll}>
+                                <div class="schedule-view-all-container">
+                                    <a class="schedule-view-all-link" onclick={handleScheduleViewAll}>
+                                        View All >
+                                    </a>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={upcomingSchedule.length}>
+                            <div class="no-schedule">
+                                <p>No upcoming activities scheduled</p>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={upcomingSchedule}>
+                        <div class="no-schedule">
+                            <p>Loading upcoming schedule...</p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,234 @@
+<template>
+    <lightning-card>
+        <div class="slds-m-around_medium">
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading approval requests..."></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={errorMessage}>
+                <div class="slds-m-bottom_small">
+                    <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Error">
+                            <lightning-icon icon-name="utility:error" size="x-small" variant="inverse"></lightning-icon>
+                        </span>
+                        <h2>
+                            <strong>Error:</strong> {errorMessage}
+                        </h2>
+                        <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-small"
+                            title="Close" onclick={clearErrorMessage}>
+                            <lightning-icon icon-name="utility:close" size="x-small" variant="inverse"
+                                alternative-text="Close"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- No Data Message -->
+            <template if:true={showNoDataMessage}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <p class="slds-text-color_weak">All sub-departmental budget requests have been processed.</p>
+                </div>
+            </template>
+
+            <!-- Approval Requests Dropdown List -->
+            <template if:true={hasApprovalRequests}>
+                <div class="approval-requests-container">
+                    <template for:each={approvalRequests} for:item="request">
+                        <div key={request.workitemId} class="approval-request-item slds-m-bottom_small">
+                            <div class="slds-box slds-theme_default">
+                                <!-- Expandable Header -->
+                                <div class="request-header" onclick={toggleRequestDetails}
+                                    data-workitem-id={request.workitemId} data-expanded={request.isExpanded}>
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name={request.expandIconName} size="x-small"
+                                                    class="slds-m-right_small expand-icon">
+                                                </lightning-icon>
+                                                <div class="request-title">
+                                                    <h3 class="slds-text-heading_small slds-truncate">
+                                                        {request.departmentName}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                            <div class="action-buttons slds-float_right">
+                                                <lightning-button variant="brand" label="Accept" size="small"
+                                                    class="slds-m-right_x-small" data-workitem-id={request.workitemId}
+                                                    data-action="approve" onclick={handleApprovalAction}>
+                                                </lightning-button>
+                                                <lightning-button variant="destructive" label="Reject" size="small"
+                                                    data-workitem-id={request.workitemId} data-action="reject"
+                                                    onclick={handleApprovalAction}>
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Expandable Details -->
+                                <template if:true={request.isExpanded}>
+                                    <div class="request-details slds-m-top_medium slds-p-top_medium slds-border_top">
+                                        <div class="uniform-chart-container">
+                                            <!-- Budget Given -->
+                                            <div class="uniform-chart-card">
+                                                <div class="chart-circle given">
+                                                    <div class="chart-inner">
+                                                        <div class="chart-amount">₹{request.formattedBudgetAmount}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="chart-title">Budget Given</div>
+                                            </div>
+
+                                            <!-- Utilized Budget -->
+                                            <div class="uniform-chart-card">
+                                                <div class="chart-circle utilized">
+                                                    <div class="chart-inner">
+                                                        <div class="chart-amount">₹{request.formattedUtilizedBudget}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="chart-title">Utilized Budget</div>
+                                            </div>
+
+                                            <!-- Percentage Utilized -->
+                                            <div class="uniform-chart-card">
+                                                <div class="chart-circle percentage">
+                                                    <div class="chart-inner">
+                                                        <div class="chart-amount">{request.utilizedPercentage}%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="chart-title">Utilized Budget %</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Proposals Table -->
+                                        <!-- Proposals Table -->
+                                        <template if:true={request.hasProposals}>
+                                            <div class="proposals-section slds-m-top_large">
+                                                <h4 class="slds-text-heading_small slds-m-bottom_medium">Related
+                                                    Proposals</h4>
+                                                <div class="activities-table-wrapper">
+                                                    <table class="activities-table">
+                                                        <thead>
+                                                            <tr class="activities-header-row">
+                                                                <th class="activities-header-cell">Name</th>
+                                                                <th
+                                                                    class="activities-header-cell activities-header-divider">
+                                                                    Asked Budget</th>
+                                                                <th
+                                                                    class="activities-header-cell activities-header-divider">
+                                                                    Expected Revenue</th>
+                                                                <th
+                                                                    class="activities-header-cell activities-header-divider">
+                                                                    Tentative Date</th>
+                                                                <th
+                                                                    class="activities-header-cell activities-header-divider">
+                                                                    Team Member</th>
+                                                                <th
+                                                                    class="activities-header-cell activities-header-divider">
+                                                                    Expected Outcome</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <template for:each={request.proposals} for:item="proposal">
+                                                                <tr key={proposal.Id} class="activities-row">
+                                                                    <td class="activities-cell">{proposal.Name}</td>
+                                                                    <td class="activities-cell">
+                                                                        ₹{proposal.formattedAskedBudget}</td>
+                                                                    <td class="activities-cell">
+                                                                        ₹{proposal.formattedExpectedRevenue}</td>
+                                                                    <td class="activities-cell">{proposal.formattedDate}
+                                                                    </td>
+                                                                    <td class="activities-cell">
+                                                                        {proposal.teamMemberName}</td>
+                                                                    <td class="activities-cell">
+                                                                        <c-rich-text-display
+                                                                            content={proposal.Expected_Outcome__c}></c-rich-text-display>
+                                                                    </td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <!-- View All Button -->
+                                                <template if:true={request.showViewAllButton}>
+                                                    <div class="view-all-container">
+                                                        <a class="view-all-link" onclick={handleViewAllProposals}
+                                                            data-workitem-id={request.workitemId}>
+                                                            View All >
+                                                        </a>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+
+                                        <!-- No Proposals Message -->
+                                        <template if:false={request.hasProposals}>
+                                            <div class="no-proposals-message slds-m-top_large slds-text-align_center">
+                                                <p class="slds-text-color_weak">No proposals found for this budget
+                                                    request.</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+
+    <!-- Comments Modal -->
+    <template if:true={showCommentsModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeCommentsModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-modal__title slds-hyphenate">
+                        {modalTitle}
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="comments-textarea">
+                            Comments (Optional)
+                        </label>
+                        <div class="slds-form-element__control">
+                            <lightning-textarea id="comments-textarea" value={approvalComments}
+                                placeholder="Enter your comments here..." onchange={handleCommentsChange}
+                                max-length="500">
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeCommentsModal}>
+                    </lightning-button>
+                    <lightning-button variant={confirmButtonVariant} label={confirmButtonLabel}
+                        onclick={confirmApprovalAction} disabled={isProcessingApproval}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

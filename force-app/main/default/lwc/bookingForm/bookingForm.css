@@ -1,0 +1,325 @@
+.margin{
+         margin-left: 220px;
+         margin-right: 220px;
+}
+.divmargin{
+  margin-left: 70px;
+  margin-right: 140px;
+}
+
+
+/* Card styling */
+.form-card {
+    --slds-c-card-color-background: #fff;
+    box-shadow: none;
+    border: none;
+}
+
+/* Container */
+.form-container {
+    padding: 0px 75px;
+    font-family: "Arial", sans-serif;
+    font-size: 13px;
+    color: #000;
+    background-color: #fff;
+}
+
+/* Header Section */
+.header-section {
+    display: flex;
+    justify-content: space-between; /* Push items to ends */
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px; /* Optional: adds space on left and right */
+}
+
+/* Header Logos */
+.header-logo {
+    max-height: 80px;
+}
+
+/* Optional: separate classes if needed */
+.left-logo {
+    align-self: flex-start;
+}
+
+.right-logo {
+    align-self: flex-end;
+}
+
+.rera {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+
+/* Section Headings */
+h2 {
+    font-size: 15px;
+    margin: 25px 0 10px;
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+/* Section wrapper */
+.section {    
+    /* padding: 15px; */
+    border-radius: 4px;
+    margin-bottom: 25px;
+    border-bottom: 1.5px solid black;
+}
+
+/* Row styling */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+/* Lightning inputs inside row */
+.row lightning-input,
+.row lightning-combobox,
+.row lightning-checkbox-group {
+    flex: 1 1 45%;
+    min-width: 250px;
+}
+
+/* Ensure combobox and file inputs align well */
+lightning-input[type="file"],
+lightning-combobox,
+lightning-input {
+    --slds-c-input-spacing-horizontal-end: 0;
+    --slds-c-input-spacing-horizontal-start: 0;
+}
+
+/* Checkbox group alignment */
+lightning-checkbox-group {
+    display: block;
+    margin-top: 6px;
+}
+
+/* Terms box */
+.terms-box {
+    /* border: 1px solid #ccc; */    
+    /* background-color: #f8f8f8; */
+    font-size: 12px;
+    padding: 10px;
+    text-align: justify;
+    overflow-y: auto;
+    border-radius: 3px;
+}
+
+/* Signature section */
+.row lightning-input.signature-input {
+    min-width: 220px;
+    flex: 1 1 40%;
+}
+
+/* Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;   
+    gap: 15px;
+}
+
+.preview,
+.submit,
+.photo-btn {
+    background-color: #005fa9;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Lightning button styling overrides */
+lightning-button.preview button,
+lightning-button.submit button,
+lightning-button.photo-btn button {
+    background-color: #005fa9;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 8px 20px;
+    font-weight: bold;
+    color: white;
+}
+
+lightning-button.preview button:hover,
+lightning-button.submit button:hover,
+lightning-button.photo-btn button:hover {
+    background-color: #004c88;
+}
+
+.photo-upload-box lightning-input {
+    height: 250px; /* or any height you want */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.photo-upload-box input[type="file"] {
+    height: 200px;
+    width: 200px;
+    font-size: 16px;
+    padding: 10px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+.income-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.industry-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.05rem;
+    flex-wrap: nowrap;
+}
+.application-header {
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 0.1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: medium; 
+    
+}
+/* Side-by-side layout */
+.side-by-side-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.input-group {
+    flex: 1;
+}
+
+.income-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.nation-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.sourceboldname-label {
+    font-weight: bold;   
+    text-align: left;
+}
+.source-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.marketing-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.side-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    text-align: center;
+    margin-top: 20px;
+   
+}
+/* Company Info */
+.company-name {
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+.company-address {
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.signature-input {
+    --slds-c-input-color-border: transparent; /* remove default border */
+    --slds-c-input-radius-border: 0; /* remove default rounding from input itself */
+    border: 2px dashed #000; /* custom dashed border */
+    border-radius: 12px; /* rounded corners */
+    padding: 8px; /* space inside */
+}
+
+.signature-input input {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+
+.co-applicant-block {
+    position: relative;
+}
+
+.co-applicant-block lightning-button {
+    margin-left: auto;
+}
+
+
+/*newly  added*/
+
+
+.name-row {
+    align-items: center; /* vertically align label & input */
+    gap: 0.25rem; /* space between label and input */
+}
+
+.boldname-label {
+    font-weight: bold;   
+    text-align: left;
+}
+.lightname-label {
+    font-weight:lighter;   
+    text-align: left;
+}
+.name-input {
+    flex: 1;
+    border-radius: 50px;
+
+}
+
+
+.hidden-file {
+    display: none;
+}
+
+.file-upload-col {
+    display: content;    
+    align-items: center;
+    flex: 1;
+    border-radius: 40px;
+    gap: 10px;
+}
+
+.file-label {
+    font-weight: bold;
+    text-align: left;
+    
+}

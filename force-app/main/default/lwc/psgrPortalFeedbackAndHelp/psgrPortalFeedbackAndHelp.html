@@ -1,0 +1,600 @@
+<template>
+    <!-- Header Bar as in image 1 -->
+   <div class="portal-header">
+        <button class="portal-icon portal-toggle-btn" onclick={handleMenuToggle} aria-label="Toggle Menu">
+            <!-- SVG matches your image: thin rectangle with thick left bar (book-style) -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.1">
+                <rect x="6" y="6" width="5" height="12" rx="1.3"/>
+                <rect x="13" y="6" width="5" height="12" rx="1.3"/>
+            </svg>
+        </button>
+        <div class="portal-info">
+            <div class="portal-title">PSGR Krishnammal College for Women</div>
+            <div class="portal-desc">Learning Management System - BA English</div>
+        </div>
+    </div>
+    <!-- Main feedback container, as previously provided -->
+    <div class="container">
+        <h2>Feedback &amp; Help</h2>
+        <div class="subtitle">Share your feedback and get help with the portal</div>
+        <div class="tabs">
+            <div class={courseFeedbackTabClass} onclick={showCourseFeedback}>Course Feedback</div>
+            <div class={helpFaqTabClass} onclick={showHelpFaq}>Help &amp; FAQs</div>
+            <div class={contactSupportTabClass} onclick={showContactSupport}>Contact Support</div>
+        </div>
+         <!-- Course Feedback Tab --> 
+        <template if:true={showCourseFeedbackSection}>
+            <div class="course-feedback-section">
+                <div class="feedback-row icon-label">
+                    <span class="chat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2.5" y="4" width="17" height="11" rx="3" />
+                            <polyline points="4.5 17.5 7.5 15 14.5 15 17.5 17.5" />
+                        </svg>
+                    </span>
+                    <span class="label-text">Submit Course Feedback</span>
+                </div>
+                <div class="feedback-bar">
+                    <button class="feedback-btn" onclick={handleSubmit}>
+                        <span class="star-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 2.5l2.49 5.05 5.51.8-3.99 3.89.94 5.49L10 14.53l-4.95 2.6.94-5.49L2 8.35l5.51-.8L10 2.5z"
+                                    stroke="#fff" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        Provide Feedback
+                    </button>
+                </div>
+                <div class="feedback-note">
+                    Your feedback helps us improve the learning experience. All feedback is anonymous and confidential.
+                </div>
+            </div>
+            <div class="previous-feedback-card">
+                <div class="previous-feedback-title">Your Previous Feedback</div>
+                <div class="feedback-item">
+                    <div class="feedback-col">
+                        <div class="feedback-course">British Literature I</div>
+                        <div class="feedback-stars">
+                            <template for:each={fullStars} for:item="star"><span key={star}>&#9733;</span></template>
+                        </div>
+                        <div class="desc">Excellent teaching methodology and comprehensive course content.</div>
+                    </div>
+                    <div class="feedback-status">
+                        <span class="badge">Submitted</span>
+                        <div class="feedback-date">2025-09-15</div>
+                    </div>
+                </div>
+                <div class="feedback-item">
+                    <div class="feedback-col">
+                        <div class="feedback-course">American Literature</div>
+                        <div class="feedback-stars">
+                            <template for:each={fourStars} for:item="star"><span key={star}>&#9733;</span></template>
+                            <span>&#9734;</span>
+                        </div>
+                        <div class="desc">Good course structure, would appreciate more interactive sessions.</div>
+                    </div>
+                    <div class="feedback-status">
+                        <span class="badge">Submitted</span>
+                        <div class="feedback-date">2025-09-10</div>
+                    </div>
+                </div>
+            </div>
+            <template if:true={showFeedbackModal}>
+                <div class="course-feedback-modal-backdrop"></div>
+                <div class="course-feedback-modal-card">
+                    <div class="course-feedback-modal-header">
+                        <div class="course-feedback-modal-title">Course Feedback Form</div>
+                        <div class="course-feedback-modal-desc">
+                            Share your feedback about the course content, teaching quality, and overall experience.
+                        </div>
+                        <button class="modal-close" onclick={closeFeedbackModal} aria-label="Close">&times;</button>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="feedback-col">
+                            <label>Select Course</label>
+                            <select onchange={handleCourseSelect}>
+                                <option value="">Choose a course</option>
+                                <option value="ENG301">British Literature I (ENG301)</option>
+                                <option value="ENG302">American Literature (ENG302)</option>
+                                <option value="ENG303">Indian Writing in English (ENG303)</option>
+                                <option value="ENG304">Literary Theory (ENG304)</option>
+                                <option value="ENG305">Academic Writing (ENG305)</option>
+                            </select>
+                        </div>
+                        <div class="feedback-col">
+                            <label>Feedback Category</label>
+                            <select>
+                                <option>Teaching Methodology</option>                                
+                                <option>Course Content</option>
+                                <option>Assessment Methods</option>
+                                <option>Learning Resources</option>
+                                <option>Overall</option>
+                            </select>
+                        </div>
+                    </div>
+                     <!-- Course details appear only if a course is selected -->
+                    <template if:true={showCourseDetails}>
+                        <div class="course-details">
+                            <div class="course-title">{selectedCourseTitle}</div>
+                            <div class="course-faculty">Faculty: {selectedCourseFaculty}</div>
+                        </div>
+                    </template>                    
+                       <div style="margin-top:18px;font-weight: 500;">
+                                    <label>Rating (1-5 stars)</label>
+                                    <div class="modal-star-row">
+                                    <template for:each={stars} for:item="star">
+                                        <span
+                                            key={star.value}
+                                            class="modal-star"
+                                            data-value={star.value}
+                                            onclick={handleStarClick}                                        >
+                                            <template if:true={star.filled}>&#9733;</template>
+                                            <template if:false={star.filled}>&#9734;</template>
+                                        </span>
+                                    </template>
+                                </div>
+                         </div>
+                    
+                    <div style="margin-top:20px;font-weight: 500;">
+                        <label>Comments (Optional)</label>
+                        <textarea class="feedback-textarea" placeholder="Share your detailed feedback..."></textarea>
+                    </div>
+                    <div class="feedback-modal-actions">
+                        <button class="feedback-modal-submit" onclick={handleFeedbackSubmit}>
+                            <span class="submit-icon">
+                                <svg height="18" width="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M2 9L16 3L10 17L8 10L2 9Z" fill="white"/>
+                                </svg>
+                            </span>
+                            Submit Feedback
+                        </button>
+                        <button class="feedback-modal-cancel" onclick={closeFeedbackModal}>Cancel</button>
+                    </div>
+                </div>
+            </template>
+            <template if:true={showToast}>
+                <div class="psgr-toast-container">
+                    <div class={toastClass}>
+                        <span class="psgr-toast-icon" lwc:dom="manual"></span>
+                        <span>{toastMessage}</span>
+                    </div>
+                </div>
+            </template>
+
+           
+
+
+  
+
+
+
+
+        </template>
+         <!-- Help & FAQs Tab -->
+          <template if:true={showHelpFaqSection}>
+            <div class="faq-section">
+                <div class="faq-header">
+                    <span class="faq-header-icon">
+                        <svg width="19" height="19" fill="none" stroke="#222" stroke-width="1.5"><circle cx="9.5" cy="9.5" r="8.5"/><path d="M9.5 6.5v1.8c0 .5.3.8.7 1l.9.3c.6.2.9.5.9 1.1v.2c0 .7-.3 1-1 1v.1"/><circle cx="9.5" cy="13.7" r="0.5"/></svg>
+                    </span>
+                    Frequently Asked Questions
+                </div>
+                <div class="faq-search-row">
+                    <div class="faq-search-box">
+                        <span class="faq-search-icon">
+                            <svg width="15" height="15" fill="none" stroke="#999" stroke-width="1.2"><circle cx="7" cy="7" r="5"/><line x1="11.3" y1="11.3" x2="14" y2="14"/></svg>
+                        </span>
+                        <input class="faq-search-input" type="text" placeholder="Search FAQs..." oninput={handleFaqSearch}/>
+                    </div>
+                    <div class="faq-category-dropdown">
+                         <select value={faqCategory} onchange={handleFaqCategoryChange}>
+                            <option value="all">All Categories</option>
+                            <option value="academic">Academic</option>
+                            <option value="technical">Technical</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                </div>      
+                <div class="faq-list">
+                    <!-- No results empty state -->
+                    <template if:true={noFaqsFound}>
+                        <div class="faq-empty-state">
+                            <div class="faq-empty-icon">
+                                <svg width="64" height="64" fill="none" stroke="#888B99" stroke-width="2.8">
+                                    <circle cx="32" cy="32" r="28"/>
+                                    <path d="M32 44v2.2" stroke-linecap="round"/>
+                                    <path d="M32 22c-3 0-6 1.7-6 5.2 0 3 2.3 4.2 6 4.2s6 1.2 6 4.2c0 2.6-2.2 4.2-6 4.2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="faq-empty-text">No FAQs found matching your search.</div>
+                        </div>
+                    </template>
+
+                    <!-- Academic -->
+                    <template if:true={showAcademicFaqs}>
+                        <template if:true={filteredAcademicFaqs.length}>
+                            <div class="faq-category">
+                                <div class="faq-category-header">
+                                    <span class="faq-category-icon">
+                                        <svg width="15" height="15" fill="none" stroke="#222" stroke-width="1.4">
+                                            <circle cx="7.5" cy="7.5" r="6.2"/>
+                                            <rect x="4.8" y="4.6" width="5.2" height="6" rx="1"/>
+                                        </svg>
+                                    </span>
+                                    Academic
+                                </div>
+                                <template for:each={filteredAcademicFaqs} for:item="faq">
+                                    <div key={faq.question} class="faq-question-row">
+                                        <a href="javascript:void(0)" class="faq-question-link" data-question={faq.question} onclick={handleFaqClick}>
+                                            {faq.question}
+                                            <span class="faq-arrow-icon">
+                                                <template if:true={faq.isExpanded}>
+                                                    <!-- Up arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 12 10 8 14 12"></polyline>
+                                                    </svg>
+                                                </template>
+                                                <template if:false={faq.isExpanded}>
+                                                    <!-- Down arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 8 10 12 14 8"></polyline>
+                                                    </svg>
+                                                </template>
+                                            </span>
+                                        </a>
+
+                                        <template if:true={faq.isExpanded}>
+                                            <div class="faq-answer">{faq.answer}</div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </template>                
+
+                    <!-- Technical -->
+                    <template if:true={showTechnicalFaqs}>
+                        <template if:true={filteredTechnicalFaqs.length}>
+                            <div class="faq-category">
+                                <div class="faq-category-header">
+                                    <span class="faq-category-icon">
+                                        <svg width="15" height="15" fill="none" stroke="#222" stroke-width="1.4">
+                                            <circle cx="7.5" cy="7.5" r="6.2"/>
+                                            <path d="M7.5 5.5v2.5l2 1"/>
+                                        </svg>
+                                    </span>
+                                    Technical
+                                </div>
+                                <template for:each={filteredTechnicalFaqs} for:item="faq">
+                                    <div key={faq.question} class="faq-question-row">
+                                    <a href="javascript:void(0)" class="faq-question-link" data-question={faq.question} onclick={handleFaqClick}>
+                                            {faq.question}
+                                            <span class="faq-arrow-icon">
+                                                <template if:true={faq.isExpanded}>
+                                                    <!-- Up arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 12 10 8 14 12"></polyline>
+                                                    </svg>
+                                                </template>
+                                                <template if:false={faq.isExpanded}>
+                                                    <!-- Down arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 8 10 12 14 8"></polyline>
+                                                    </svg>
+                                                </template>
+                                            </span>
+                                        </a>
+
+                                        <template if:true={faq.isExpanded}>
+                                            <div class="faq-answer">{faq.answer}</div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+
+                    <!-- General -->
+                    <template if:true={showGeneralFaqs}>
+                        <template if:true={filteredGeneralFaqs.length}>
+                            <div class="faq-category">
+                                <div class="faq-category-header">
+                                    <span class="faq-category-icon">
+                                        <svg width="15" height="15" fill="none" stroke="#222" stroke-width="1.4">
+                                            <circle cx="7.5" cy="7.5" r="6.2"/>
+                                            <line x1="7.5" y1="4" x2="7.5" y2="10"/>
+                                            <circle cx="7.5" cy="11.6" r="0.9"/>
+                                        </svg>
+                                    </span>
+                                    General
+                                </div>
+                                <template for:each={filteredGeneralFaqs} for:item="faq">
+                                    <div key={faq.question} class="faq-question-row">
+                                        <a href="javascript:void(0)" class="faq-question-link" data-question={faq.question} onclick={handleFaqClick}>
+                                            {faq.question}
+                                            <span class="faq-arrow-icon">
+                                                <template if:true={faq.isExpanded}>
+                                                    <!-- Up arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 12 10 8 14 12"></polyline>
+                                                    </svg>
+                                                </template>
+                                                <template if:false={faq.isExpanded}>
+                                                    <!-- Down arrow -->
+                                                    <svg width="18" height="18" fill="none" stroke="#777" stroke-width="1.8">
+                                                        <polyline points="6 8 10 12 14 8"></polyline>
+                                                    </svg>
+                                                </template>
+                                            </span>
+                                        </a>
+
+                                        <template if:true={faq.isExpanded}>
+                                            <div class="faq-answer">{faq.answer}</div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+                </div>                
+            </div>
+            <!-- Still Need Help -->                            
+             <div class="faq-still-help-row">
+                    <div class="faq-still-help-title">Still Need Help?</div>
+                    <div class="faq-still-help-label">Describe your issue</div>
+                    <div class="faq-still-help-input-row">
+                        <textarea class="faq-still-help-input" rows="2" placeholder="Please describe your problem or question in detail..." value={issueDescription} oninput={handleIssueDescription}></textarea>
+                    </div>
+                    <div class="faq-still-help-footer">
+                        <button class="faq-still-help-submit" onclick={openSupportModal}>
+                            <span class="faq-still-help-send-icon">
+                                <svg height="18" width="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 9L16 3L10 17L8 10L2 9Z" fill="white"/>
+                                </svg>
+                            </span>
+                            Submit Query to Admin
+                        </button>
+                    </div>
+                    <div class="faq-still-help-note">
+                        Our support team will respond to your query within 24 hours.
+                    </div>
+             </div>   
+
+            <!-- Support Ticket Modal -->
+            <template if:true={showSupportModal}>
+                <div class="support-modal-backdrop" onclick={closeSupportModal}></div>
+                <div class="support-modal-card">
+                    <div class="support-modal-title">Submit Support Ticket</div>
+                    <div class="support-modal-desc">
+                        Create a detailed support ticket for administrative assistance. Our team will review and respond based on priority level.
+                    </div>
+                    <div class="support-row support-row-double">
+                        <div class="support-col">
+                            <label>Issue Category</label>
+                            <select value={modalIssueCategory} onchange={handleModalIssueCategory}>
+                                <option>Academic Issues</option>
+                                <option>Technical Problems</option>
+                                <option>Portal Navigation</option>
+                                <option>Attendance Related</option>
+                                <option>Grades & Results</option>
+                                <option>Assignment Issues</option>
+                                <option>Account Problems</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                        <div class="support-col">
+                            <label>Priority Level</label>
+                            <select value={modalPriorityLevel} onchange={handleModalPriorityLevel}>
+                                <option>Low - General inquiry</option>
+                                <option>Medium - Standard issue</option>
+                                <option>High - Urgent Problem</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="support-row">
+                        <label>Subject</label>
+                        <input type="text" value={modalSubject} onchange={handleModalSubject} placeholder="Brief description of your issue" />
+                    </div>
+                    <div class="support-row">
+                        <label>Related Course (if applicable)</label>
+                        <select value={modalRelatedCourse} onchange={handleModalRelatedCourse}>
+                            <option>Not course related</option>
+                                <option>British Literature I (ENG301)</option>
+                                <option>American Literature (ENG302)</option>
+                                <option>Indian Writing in English (ENG303)</option>
+                                <option>Literary Theory (ENG304)</option>
+                                <option>Academic Writing (ENG305)</option>
+                        </select>
+                    </div>
+                    <div class="support-row">
+                        <label>Detailed Description</label>
+                        <textarea rows="3" value={modalDetailedDescription} onchange={handleModalDetailedDescription} placeholder="Please provide detailed information about your issue, including steps you've already tried..."></textarea>
+                    </div>
+                    <div class="support-row">
+                        <label>Preferred Contact Method</label>
+                        <select value={modalContactMethod} onchange={handleModalContactMethod}>
+                            <option>Email Response</option>
+                                <option>Phone Call</option>
+                                <option>Portal Message</option>
+                                <option>In-Person Meeting</option>
+                        </select>
+                    </div>
+                    <div class="support-row-checkbox">
+                        <input type="checkbox" checked={modalHasFiles} onchange={handleModalHasFiles}/>
+                        <label>I have files to attach (screenshots, documents)</label>
+                    </div>
+                    <div class="support-row-checkbox">
+                        <input type="checkbox" checked={modalIsUrgent} onchange={handleModalIsUrgent}/>
+                        <label>This is an urgent request requiring immediate attention</label>
+                    </div>
+                    <div class="support-summary">
+                        <strong>Ticket Summary</strong>
+                        <div>Category: {modalIssueCategory}</div>
+                        <div>Priority: {modalPriorityLevel}</div>
+                        <div>Expected Response: Within 24 hours</div>
+                        <div>Contact Method: {modalContactMethod}</div>
+                        <div>Related Course: {modalRelatedCourse}</div>
+                    </div>
+                    <div class="support-modal-actions">
+                        <button class="support-modal-submit" onclick={submitSupportTicket}>
+                            <span class="support-modal-submit-icon">
+                            <!-- Paper Plane SVG Icon (inline for sharpness) -->
+                            <svg height="18" width="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 9L16 3L10 17L8 10L2 9Z" fill="white"/>
+                            </svg>
+                            </span>
+                            <span>Submit Support Ticket</span>
+                        </button>
+                        <button class="support-modal-cancel" onclick={closeSupportModal}>
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </template>
+            <!-- Toast Notification -->
+            <template if:true={showToast}>
+                <div class="psgr-toast-container">
+                    <div class={toastClass}>
+                        <span class="psgr-toast-icon" lwc:dom="manual"></span>
+                        <span>{toastMessage}</span>
+                    </div>
+                </div>
+            </template>
+        </template>        
+          <!-- Contact SupportTab -->    
+        <template if:true={showContactSupportSection}>
+        <div class="support-grid">
+            <div class="support-section">
+                <div class="support-title">
+                    <span class="support-icon">
+                        <!-- Phone SVG -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13.96.37 1.89.7 2.78a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.54 6.54l1.27-1.27a2 2 0 0 1 2.11-.45c.89.33 1.82.57 2.78.7a2 2 0 0 1 1.72 2z"/>
+                        </svg>
+
+                    </span>
+                    Phone Support
+                </div>
+                <div class="support-contact-list">
+                    <div>
+                        <strong>Academic Office</strong><br>
+                        +91 422 2571020<br>
+                         <span class="small-text">Mon-Fri: 9:00 AM - 5:00 PM</span>
+                        
+                    </div>
+                    <div>
+                        <strong>IT Helpdesk</strong><br>
+                        +91 422 2571025<br>
+                         <span class="small-text">Mon-Sat: 8:00 AM - 6:00 PM</span>
+                        
+                    </div>
+                    <div>
+                        <strong>Emergency Contact</strong><br>
+                        +91 422 2571000<br>
+                         <span class="small-text">24/7 Available</span>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="support-section">
+                <div class="support-title">
+                    <span class="support-icon">
+                        <!-- Email SVG -->
+                        <svg width="20" height="20" fill="none" stroke="#222" stroke-width="1.5">
+                            <rect x="2" y="4" width="16" height="12" rx="2"></rect>
+                            <polyline points="4 6 10 12 16 6"></polyline>
+                        </svg>
+                    </span>
+                    Email Support
+                </div>
+                <div class="support-contact-list">
+                    <div>
+                        <strong>Academic Queries</strong><br>
+                        academics@psgrwc.edu.in<br>
+                        <span class="small-text">Response within 24 hours</span>
+                    </div>
+                    <div>
+                        <strong>Technical Support</strong><br>
+                        support@psgrwc.edu.in<br>
+                        <span class="small-text">Response within 4 hours</span>
+                    </div>
+                    <div>
+                        <strong>General Inquiries</strong><br>
+                        info@psgrwc.edu.in<br>
+                        <span class="small-text">Response within 48 hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <div class="office-contact-row">
+    <div class="office-hours-section">
+        <div class="hours-title">
+            <span class="clock-icon">
+                <!-- Clock Icon SVG -->
+                <svg width="20" height="20" fill="none" stroke="#222" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;">
+                    <circle cx="10" cy="10" r="8"/>
+                    <polyline points="10,10 10,6"/>
+                    <polyline points="10,10 13,12"/>
+                </svg>
+            </span>
+            <span>Office Hours &amp; Location</span>
+        </div>
+        <div style="margin-top:18px;">
+            <strong>Office Hours</strong>
+            <div class="day-row">Monday - Friday: <span class="office-hours-value">9:00 AM - 5:00 PM</span></div>
+            <div class="day-row">Saturday: <span class="office-hours-value">9:00 AM - 1:00 PM</span></div>
+            <div class="day-row">Sunday: <span class="office-hours-value red-text">Closed</span></div>
+        </div>
+    </div>
+    <div class="location-section">
+        <div style="margin-bottom:15px;">
+            <strong>Visit Us</strong>
+        </div>
+        <div>
+            <span class="office-hours-value"></span> PSGR Krishnammal College for Women <br>
+            <span class="office-hours-value"></span> Peelamedu, Coimbatore - 641004 <br>
+            <span class="office-hours-value red-text"></span> Tamil Nadu, India
+        </div>
+        <div class="get-directions-row">
+            <button class="directions-btn">
+                <!-- Arrow Icon SVG for button -->
+                <svg style="vertical-align:middle;margin-right:6px;" width="16" height="16" fill="none" stroke="#222" stroke-width="1.4"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 8 8 12 12 8"></polyline>
+                </svg>
+                Get Directions
+            </button>
+        </div>
+    </div>
+</div>
+
+
+        <div class="before-contact-row">
+            <div class="before-contact-section">
+                <strong>Before You Contact Us</strong>
+                <div>
+                    Please check these common solutions before reaching out:
+                </div>
+                <div>
+                    <span class="mini-title">Login Issues</span>
+                    <ul>
+                        <li>Check your student ID and password</li>
+                        <li>Clear browser cache and cookies</li>
+                        <li>Try a different browser</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="before-contact-section">
+                <span class="mini-title">Performance Issues</span>
+                <ul>
+                    <li>Check your internet connection</li>
+                    <li>Use during off-peak hours</li>
+                    <li>Update your browser</li>
+                </ul>
+            </div>
+        </div>
+        </template>
+    </div>
+</template>

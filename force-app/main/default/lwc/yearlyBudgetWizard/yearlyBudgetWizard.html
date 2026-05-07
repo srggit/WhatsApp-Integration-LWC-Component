@@ -1,0 +1,187 @@
+<template>
+    <!-- Yearly Budget View with white background -->
+    <template if:true={showYearlyBudgetView}>
+        <div class="yearly-budget-view">
+            <!-- Header Section -->
+            <div class="header-section slds-p-around_medium">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <h1 class="slds-text-heading_large">Yearly Budget Allocation</h1>
+                    <lightning-button variant="brand" label="Add New Yearly Budget"
+                        onclick={openModal}></lightning-button>
+                </div>
+            </div>
+
+            <!-- Modal Section -->
+            <template if:true={isModalOpen}>
+                <section role="dialog" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container custom-modal-size">
+                        <!-- Modal Header -->
+                        <header class="slds-modal__header custom-modal-header">
+                            <div class="title-with-icon">
+                                <span class="icon-circle">
+                                    <lightning-icon icon-name="utility:edit" alternative-text="Edit" class="blue-icon"
+                                        size="small"></lightning-icon>
+                                </span>
+                                <h2 class="slds-modal__title">New Budget</h2>
+                            </div>
+                        </header>
+
+                        <!-- Modal Body Step 1 -->
+                        <template if:true={isStepOne}>
+                            <div class="slds-modal__content slds-p-around_medium slds-theme_shade">
+                                <lightning-input label="Budget Name" value={budgetName}
+                                    onchange={handleBudgetNameChange} required></lightning-input>
+
+                                <lightning-input type="number" label="Budget Amount" value={budgetAmount}
+                                    onchange={handleBudgetAmountChange} required></lightning-input>
+                                <lightning-combobox name="fiscalYear" label="Fiscal Year" value={fiscalYear}
+                                    placeholder="Select Fiscal Year" options={fiscalYearOptions}
+                                    onchange={handleFiscalYearChange} required>
+                                </lightning-combobox>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input type="text" label="Start Date" value={startDate}
+                                            disabled></lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input type="text" label="End Date" value={endDate}
+                                            disabled></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Modal Body Step 2 -->
+                        <template if:false={isStepOne}>
+                            <div class="slds-modal__content slds-p-around_medium slds-theme_shade">
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <label for="businessObjective" class="slds-form-element__label">
+                                            Business Objective<span class="slds-required">*</span>
+                                        </label>
+                                        <lightning-input-rich-text id="businessObjective" value={businessObjective}
+                                            onchange={handleObjectiveChange} required></lightning-input-rich-text>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <label for="expectedOutcome" class="slds-form-element__label">
+                                            Expected Outcome<span class="slds-required">*</span>
+                                        </label>
+                                        <lightning-input-rich-text id="expectedOutcome" value={expectedOutcome}
+                                            onchange={handleOutcomeChange} required></lightning-input-rich-text>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Modal Footer -->
+                        <footer class="slds-modal__footer custom-footer-bg slds-text-align_center">
+                            <lightning-button variant="neutral" label="Cancel" onclick={closeModal}
+                                disabled={isSaving}></lightning-button>
+                            <template if:true={isStepOne}>
+                                <lightning-button class="slds-m-left_small" variant="brand" label="Next"
+                                    onclick={goToStepTwo}></lightning-button>
+                            </template>
+                            <template if:false={isStepOne}>
+                                <lightning-button class="slds-m-left_small" variant="neutral" label="Back"
+                                    onclick={goToStepOne} disabled={isSaving}></lightning-button>
+                                <lightning-button class="slds-m-left_small" variant="brand" label="Save"
+                                    onclick={saveBudget} disabled={isSaving}>
+                                    <template if:true={isSaving}>
+                                        <lightning-spinner alternative-text="Saving..." size="xx-small"
+                                            class="slds-m-right_x-small"></lightning-spinner>
+                                    </template>
+                                    Save
+                                </lightning-button>
+                            </template>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <!-- Table Section -->
+            <div class="table-section slds-p-around_medium">
+                <template if:true={isLoading}>
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <lightning-spinner alternative-text="Loading..." size="large"></lightning-spinner>
+                        <p class="slds-text-title slds-p-top_medium">Loading yearly budget data...</p>
+                    </div>
+                </template>
+
+                <template if:false={isLoading}>
+                    <template if:true={budgetList}>
+                        <template if:true={budgetList.length}>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="header-cell">Name</th>
+                                        <th class="header-cell">Financial Year</th>
+                                        <th class="header-cell">Start Date</th>
+                                        <th class="header-cell">End Date</th>
+                                        <th class="header-cell">Total Budget (₹)</th>
+                                        <th class="header-cell">Utilized Budget (₹)</th>
+                                        <th class="header-cell">% Utilized</th>
+                                        <th class="header-cell" style="width: 80px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={displayedRecords} for:item="item">
+                                        <tr key={item.id}>
+                                            <td>{item.name}</td>
+                                            <td>{item.fiscalYear}</td>
+                                            <td>{item.startDate}</td>
+                                            <td>{item.endDate}</td>
+                                            <td>₹{item.totalBudget}</td>
+                                            <td>₹{item.utilizedBudget}</td>
+                                            <td>{item.utilizedpercentage}%</td>
+                                            <td>
+                                                <lightning-button-icon icon-name="utility:chevronright"
+                                                    alternative-text="View Details" data-id={item.id}
+                                                    onclick={handleViewDetails}></lightning-button-icon>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+
+                            <div class="slds-p-around_medium slds-align_absolute-center">
+                                <lightning-button variant="neutral" label="Previous" onclick={handlePrevious}
+                                    disabled={isFirstPage}></lightning-button>
+                                <span class="slds-p-horizontal_small">Page {currentPage} of {totalPages}</span>
+                                <lightning-button variant="neutral" label="Next" onclick={handleNext}
+                                    disabled={isLastPage}></lightning-button>
+                            </div>
+                        </template>
+                        <template if:false={budgetList.length}>
+                            <div class="slds-text-align_center slds-p-around_medium">
+                                <p>No yearly budget records found.</p>
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section slds-p-around_medium">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-2">
+                        <c-yearly-budget-chart></c-yearly-budget-chart>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <c-variance-heatmap></c-variance-heatmap>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Departmental Budget View (no white background wrapper) -->
+    <template if:true={showDepartmentalBudgetView}>
+        <c-departmental-budget-allocation 
+    yearly-budget-id={selectedYearlyBudgetId}
+    yearly-budget-data={selectedYearlyBudgetData}
+    onrefreshyearlybudget={handleRefreshYearlyBudget}
+    onbacktoyearlybudget={handleBackToYearlyBudget}>
+</c-departmental-budget-allocation>
+    </template>
+</template>

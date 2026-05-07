@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    margin: auto;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 352px;
+}
+
+.filter-combobox {
+    min-width: 220px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

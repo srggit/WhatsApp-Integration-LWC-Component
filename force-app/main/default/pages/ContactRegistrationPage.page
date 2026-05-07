@@ -1,0 +1,227 @@
+<!-- <apex:page controller="ContactRegistrationController" showHeader="true" sidebar="false">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"/>
+
+    <style>
+     body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+    div[ng-app="contactApp"] {
+        max-width: 400px;
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        }
+
+
+      h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: 600;
+        color: #555;
+      }
+
+      input[type="text"],
+      input[type="email"] {
+        width: 100%;
+        padding: 8px 10px;
+        margin: 6px 0 12px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus {
+        border-color: #0070d2;
+        outline: none;
+        box-shadow: 0 0 6px #a0c4f7;
+      }
+
+      button[type="submit"] {
+        background-color: #0070d2;
+        color: rgb(33, 210, 57);
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      button[type="submit"]:hover:not(:disabled) {
+        background-color: #005fb2;
+      }
+
+      button[disabled] {
+        background-color: #c6c6c6;
+        cursor: not-allowed;
+      }
+
+      div[ng-if="message"] {
+        background-color: #e6ffee;
+        border: 1px solid #00b386;
+        color: #00664d;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 4px;
+        text-align: center;
+      }
+    </style>
+
+    <div ng-app="contactApp" ng-controller="ContactCtrl" style="margin:20px;">
+        <h2>Registration Form</h2>
+        <form name="contactForm" ng-submit="submitForm()" novalidate="novalidate">
+
+            <div>
+                <label>First Name:</label><br/>
+                <input type="text" ng-model="contact.firstName" required="required" />
+            </div>
+            <div>
+                <label>Last Name:</label><br/>
+                <input type="text" ng-model="contact.lastName" required="required" />
+            </div>
+            <div>
+                <label>Phone:</label><br/>
+                <input type="text" ng-model="contact.phone" required="required" />
+            </div>
+            <div>
+                <label>Email:</label><br/>
+                <input type="email" ng-model="contact.email" required="required" />
+            </div>
+            <br/>
+            <button type="submit" ng-disabled="contactForm.$invalid">Submit</button>
+        </form>
+        <br/>
+        <div ng-if="message">
+            <strong>{{message}}</strong>
+        </div>
+    </div>
+
+    <script>
+        angular.module('contactApp', [])
+            .controller('ContactCtrl', ['$scope', function($scope) {
+                $scope.contact = {};
+
+                $scope.submitForm = function() {
+                    var firstName = $scope.contact.firstName || '';
+                    var lastName = $scope.contact.lastName || '';
+                    var phone = $scope.contact.phone || '';
+                    var email = $scope.contact.email || '';
+
+                    // Call Apex method using Visualforce remoting
+                    Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.ContactRegistrationController.createContact}',
+                        firstName, lastName, phone, email,
+                        function(result, event) {
+                            if(event.status) {
+                                $scope.$apply(function(){
+                                    $scope.message = result;
+                                    // Clear form after success
+                                    $scope.contact = {};
+                                    $scope.contactForm.$setPristine();
+                                    $scope.contactForm.$setUntouched();
+                                });
+                            } else {
+                                $scope.$apply(function(){
+                                    $scope.message = 'Error occurred during Contact creation.';
+                                });
+                            }
+                        },
+                        {escape: true}
+                    );
+                };
+            }]);
+    </script>
+</apex:page> -->
+
+
+<apex:page controller="ContactRegistrationController" showHeader="true" sidebar="false" docType="html-5.0">
+    
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"/>
+
+    <div ng-app="contactApp" ng-controller="ContactCtrl" class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="col-md-6 bg-info p-4 rounded shadow-sm">
+            <h2 class="text-center mb-4">Registration Form</h2>
+            <form name="contactForm" ng-submit="submitForm()" novalidate="novalidate">
+
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input id="firstName" type="text" ng-model="contact.firstName" class="form-control" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input id="lastName" type="text" ng-model="contact.lastName" class="form-control" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input id="phone" type="text" ng-model="contact.phone" class="form-control" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input id="email" type="email" ng-model="contact.email" class="form-control" required="required" />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" ng-disabled="contactForm.$invalid">Submit</button>
+            </form>
+
+            <div ng-if="message" class="alert alert-info mt-3 text-center" role="alert">
+                <strong>{{message}}</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        angular.module('contactApp', [])
+            .controller('ContactCtrl', ['$scope', function($scope) {
+                $scope.contact = {};
+
+                $scope.submitForm = function() {
+                    var firstName = $scope.contact.firstName || '';
+                    var lastName = $scope.contact.lastName || '';
+                    var phone = $scope.contact.phone || '';
+                    var email = $scope.contact.email || '';
+
+                    Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.ContactRegistrationController.createContact}',
+                        firstName, lastName, phone, email,
+                        function(result, event) {
+                            if(event.status) {
+                                $scope.$apply(function(){
+                                    $scope.message = result;
+                                    // Clear form after success
+                                    $scope.contact = {};
+                                    $scope.contactForm.$setPristine();
+                                    $scope.contactForm.$setUntouched();
+                                });
+                            } else {
+                                $scope.$apply(function(){
+                                    $scope.message = 'Error occurred during Contact creation.';
+                                });
+                            }
+                        },
+                        {escape: true}
+                    );
+                };
+            }]);
+    </script>
+</apex:page>

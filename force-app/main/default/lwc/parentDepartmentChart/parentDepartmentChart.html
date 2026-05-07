@@ -1,0 +1,28 @@
+<template>
+    <lightning-card>
+        <!-- Header Row: Title at left, Filter at right -->
+        <div class="slds-grid slds-p-horizontal_medium slds-p-top_medium slds-grid_align-spread slds-align-center">
+            <div>
+                <h2 class="slds-text-heading_small" title="Department Performance Quadrant">
+                    Department Performance Quadrant
+                </h2>
+            </div>
+            <div>
+                <lightning-combobox
+                    name="fiscalYear"
+                    label=" "
+                    value={selectedYear}
+                    placeholder="Select Fiscal Year"
+                    options={fiscalYearOptions}
+                    onchange={handleYearChange}
+                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-wrapper">
+            <canvas class="chart-canvas"></canvas>
+        </div>
+    </lightning-card>
+</template>

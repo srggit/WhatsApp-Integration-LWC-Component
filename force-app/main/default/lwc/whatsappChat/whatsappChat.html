@@ -1,0 +1,95 @@
+<template>
+    <div class="chat-wrapper">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="avatar-container">
+                <template if:true={avatarUrl}>
+                    <img src={avatarUrl} alt="Contact Avatar" class="avatar-img" />
+                </template>
+                <template if:false={avatarUrl}>
+                    <div class="avatar-placeholder">
+                        {avatarInitial}
+                    </div>
+                </template>
+            </div>
+            <div class="contact-info">
+                <div class="title">{name}</div>
+                <div class="subtitle">
+                    <template if:true={isTyping}>
+                        <span class="typing-indicator">
+                            <!-- <span></span>
+                            <span></span>
+                            <span></span> -->
+                            <span class="typing-text">... agent is typing</span>
+                        </span>
+                    </template>
+                    <template if:false={isTyping}>
+                        <!-- {phoneNumber} -->
+                        {lastSeenLabel}
+                    </template>
+                </div>
+            </div>
+            <!--
+            <div class="header-actions">
+                <button class="icon-btn" onclick={handleVideoCall}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick={handleMenuClick}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    </svg>
+                </button>
+            </div>
+            -->
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-body" id="chatBody">
+            <template for:each={messages} for:item="msg">
+                <div key={msg.Id} class={msg.cssClass}>
+                    <div class="bubble">
+                        <div class="message-text">{msg.Message_Text__c}</div>
+                        <div class="time">
+                            {msg.time}
+                            <template if:true={msg.isOutbound}>
+                                <span class={msg.statusClass} title={msg.statusLabel}>{msg.statusIcon}</span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Typing indicator -->
+            <!-- <div if:true={isTyping} class="typing-bubble">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="footer">
+            <!-- <button class="emoji-btn" onclick={handleEmojiClick}>
+                😊
+            </button> -->
+
+            <div class="message-input-container">
+                <input type="text" value={newMessage} oninput={handleChange} onkeypress={handleKeyPress}
+                    name="chatMessageInput" title="Type a WhatsApp message" aria-label="Type a WhatsApp message"
+                    placeholder="Type a message..." class="message-input" />
+            </div>
+
+            <button class="send-btn" onclick={handleSend} disabled={isSendDisabled} title="Send message"
+                aria-label="Send message">
+                <lightning-icon icon-name="utility:send" size="small" alternative-text="Send"></lightning-icon>
+            </button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,103 @@
+/* Custom Modal Size */
+/* DEBUG: Custom modal dimensions */
+.custom-modal-size {
+    max-width: 60rem;   /* DEBUG: Adjust modal width */
+    width: 60%;
+    height: 40rem;
+}
+
+/* Modal Header Styling */
+/* DEBUG: Gradient background */
+.custom-modal-header {
+    background: linear-gradient(135deg, #0070d2, #005fb2); /* DEBUG */
+    padding: 1rem 1.5rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+/* Icon Circle Styling */
+/* DEBUG: Circular background for icon */
+.icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+/* DEBUG: White color for modal icon */
+.blue-icon {
+    color: white;
+}
+
+/* DEBUG: Required field red asterisk */
+.slds-form-element__label[required]::after {
+    content: ' *';
+    color: #c23934;
+}
+
+/* DEBUG: Focus effect on input fields */
+.slds-input:focus,
+.slds-combobox__input:focus {
+    border-color: #0070d2;
+    box-shadow: 0 0 0 1px #0070d2;
+}
+
+/* DEBUG: Error input styling */
+.slds-has-error .slds-input,
+.slds-has-error .slds-combobox__input {
+    border-color: #c23934;
+    box-shadow: 0 0 0 1px #c23934;
+}
+
+/* DEBUG: Entry animation for modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.slds-modal__container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive Design */
+/* DEBUG: Mobile responsive modal */
+@media (max-width: 768px) {
+    .custom-modal-size {
+        max-width: 95vw;
+        margin: 1rem;
+        height: auto;
+    }
+
+    .slds-col {
+        width: 100% !important;
+    }
+}
+
+/* DEBUG: Optional override for bold label text */
+.objective-outcome-label {
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+/* DEBUG: Modal title underline */
+.modal-title-underline {
+    height: 2px;
+    width: 18%;
+    margin: 0.25rem auto 0 auto;
+    background-color: white;
+    border-radius: 1px;
+}
+
+/* DEBUG: Container to center title */
+.modal-header-title-container {
+    text-align: center;
+    flex: 1;
+}

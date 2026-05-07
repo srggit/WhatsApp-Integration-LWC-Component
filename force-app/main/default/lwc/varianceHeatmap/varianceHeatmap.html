@@ -1,0 +1,13 @@
+<template>
+  <lightning-card title="Budget Utilization by Fiscal Year">
+    <template if:true={showSpinner}>
+      <lightning-spinner alternative-text="Loading chart..." size="medium"></lightning-spinner>
+    </template>
+    <template if:true={showError}>
+      <div class="slds-text-color_error">Error loading chart data.</div>
+    </template>
+    <div class="chart-wrapper">
+      <canvas class="chart-canvas"></canvas>
+    </div>
+  </lightning-card>
+</template>

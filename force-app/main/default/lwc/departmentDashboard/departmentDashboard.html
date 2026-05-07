@@ -1,0 +1,262 @@
+<template>
+
+    <!-- Show spinner while loading -->
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    
+
+    <!-- Show if no budget is available -->
+    <template if:true={noBudgetAvailable}>
+        <lightning-card>
+            <div class="slds-grid slds-grid_align-end slds-p-around_medium">
+        <div style="min-width: 250px;">
+            <lightning-combobox name="fiscalYear" label="Select Fiscal Year" value={selectedFiscalYear}
+                options={fiscalYearOptions} onchange={handleYearChange}>
+            </lightning-combobox>
+        </div>
+    </div>
+            <div class="slds-p-around_medium slds-text-align_center">
+                <lightning-icon icon-name="utility:warning" alternative-text="Warning" variant="warning"
+                    size="large"></lightning-icon>
+                <p class="slds-text-heading_medium slds-m-top_medium">No Budget Allotted for this Department</p>
+                <p class="slds-text-body_regular">
+                    No Departmental Budget is allotted for Fiscal Year <strong>{selectedFiscalYear}</strong>.
+                </p>
+            </div>
+            <!-- <div class="slds-m-top_medium slds-grid slds-grid_align-end slds-p-horizontal_medium">
+                <lightning-button label="Back" icon-name="utility:back"
+                    onclick={handleBackToDashboard}></lightning-button>
+            </div> -->
+        </lightning-card>
+    </template>
+
+    <!-- Show dashboard if available -->
+    <template if:true={showDashboard}>
+        <template if:false={noBudgetAvailable}>
+            <lightning-card>
+                <!-- Custom Header -->
+                <div class="slds-grid slds-grid_align-spread slds-p-around_medium slds-border_bottom">
+
+                    <!-- LEFT: Icon + Department Name -->
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="standard:account" size="medium"
+                                alternative-text="Department"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <span class="slds-text-heading_medium slds-truncate" title={departmentName}>
+                                <strong>{departmentName} Department</strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Fiscal Year Dropdown -->
+                    <div style="min-width: 250px;">
+                        <lightning-combobox name="fiscalYear" label="Select Fiscal Year" value={selectedFiscalYear}
+                            options={fiscalYearOptions} onchange={handleYearChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+
+
+
+                <div class="slds-grid slds-wrap slds-p-around_medium">
+                    <!-- LEFT PANEL -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-box slds-theme_default slds-p-around_medium slds-m-bottom_medium">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-avatar src={departmentHeadPhoto} fallback-icon-name="standard:user"
+                                        size="large"></lightning-avatar>
+                                </div>
+                                <div class="slds-media__body">
+                                    <p class="slds-text-heading_medium">{departmentHeadName}</p>
+                                    <p class="slds-text-body_regular">Department Head</p>
+                                </div>
+                            </div>
+                            <div class="slds-m-top_medium">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <p><strong>Department:</strong> {departmentName}</p>
+                                        <p><strong>Team Name:</strong> {teamName}</p>
+                                        <p><strong>No. of Members:</strong> {numMembers}</p>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <p><strong>Yearly Budget:</strong> {YearlyBudget}</p>
+                                        <p><strong>Departmental Budget:</strong> {departmentalBudgetName}</p>
+                                        <p><strong>Region:</strong> {region}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- View Objective Button -->
+                            <div class="slds-m-top_medium slds-align_absolute-left">
+                                <lightning-button label="View Objective & Outcome" variant="base"
+                                    onclick={handleViewObjective}>
+                                </lightning-button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT PANEL -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-left_medium">
+                        <div class="uniform-chart-container">
+                            <div class="uniform-chart-card">
+                                <div class="chart-circle given">
+                                    <div class="chart-inner">
+                                        <div class="chart-amount">₹{departmentBudgetAmount}</div>
+                                    </div>
+                                </div>
+                                <div class="chart-title">Budget Given</div>
+                            </div>
+                            <div class="uniform-chart-card">
+                                <div class="chart-circle utilized">
+                                    <div class="chart-inner">
+                                        <div class="chart-amount">₹{formattedUtilizedBudget}</div>
+                                    </div>
+                                </div>
+                                <div class="chart-title">Utilized Budget</div>
+                            </div>
+                            <div class="uniform-chart-card">
+                                <div class="chart-circle percentage">
+                                    <div class="chart-inner">
+                                        <div class="chart-amount">{formattedUtilizedPercent}%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-title">Utilized Budget %</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TEAMS SECTION -->
+                    <div class="slds-col slds-size_1-of-1 slds-m-top_large">
+                        <div class="team-grid">
+                            <template if:true={teamCards}>
+                                <template for:each={teamCards} for:item="team">
+                                    <div key={team.id} class="team-card-container">
+                                        <div class="team-card">
+                                            <!-- <div class="team-tag">{team.name}</div> -->
+                                             <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                                                    <div class="team-tag">{team.name}</div>
+                                                    <div>
+                                                        <span class={team.statusClass}>{team.status}</span>
+                                                    </div>
+                                                </div>
+
+                                            <div class="team-details">
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Team Head:</span>
+                                                    <span class="detail-value">{team.head}</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Budget Allocated:</span>
+                                                    <span class="detail-value">₹{team.budgetallocated}</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Utilized:</span>
+                                                    <span class="detail-value">₹{team.utilizedBudget}</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Utilized %:</span>
+                                                    <span class="detail-value">{team.utilizedPercent}%</span>
+                                                </div>
+                                            </div>
+                                            <div class="button-container">
+                                                <lightning-button label="ViewDetails" icon-name="utility:preview"
+                                                    variant="brand" data-team-id={team.id} onclick={handleViewDetails}
+                                                    class="view-details-btn">
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+
+
+                            <!-- Create Team Card -->
+                            <div class="team-card-container">
+                                <template if:false={isBudgetExhausted}>
+                                    <div class="team-card create-team-card" onclick={openCreateTeamModal}>
+                                        <div class="create-team-content">
+                                            <div class="create-team-icon">+</div>
+                                            <div class="create-team-text">Create Team</div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template if:true={isBudgetExhausted}>
+                                    <div class="team-card create-team-card disabled-card" title="Budget fully utilized">
+                                        <div class="create-team-content">
+                                            <div class="create-team-icon">×</div>
+                                            <div class="create-team-text">No Budget</div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    </template>
+
+    <!-- Modal for Create Team -->
+    <c-create-team-modal if:true={isModalOpen} fiscal-year={selectedFiscalYear} onclose={handleModalClose}
+        onteamsaved={handleTeamSaved}>
+    </c-create-team-modal>
+
+    <!-- Show Team Details -->
+    <template if:true={showTeamDetails}>
+        <c-team-details-page team-id={selectedTeamId} fiscal-year={selectedFiscalYear}
+            parent-budget-id={parentDepartmentalBudgetId} onback={handleBackFromTeam}>
+        </c-team-details-page>
+    </template>
+
+    
+
+    <template if:true={isObjectiveModalOpen}>
+    <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container slds-modal_large custom-modal-size">
+            <!-- Modal Header -->
+            <header class="slds-modal__header custom-modal-header slds-grid slds-grid_align-spread slds-grid_vertical-align-center" >
+                <h2 class="slds-modal__title slds-text-color_inverse">Department Objective & Outcome</h2>
+                <lightning-button-icon
+                    icon-name="utility:close"
+                    alternative-text="Close"
+                    class="slds-m-left_auto"
+                    onclick={closeObjectiveModal}
+                    variant="bare-inverse"
+                    size="large">
+                </lightning-button-icon>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <div class="slds-grid slds-gutters">
+                    <!-- Budget Objective Section -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-box slds-theme_default slds-p-around_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Budget Objective</h3>
+                            <lightning-formatted-rich-text value={budgetObjective}></lightning-formatted-rich-text>
+                        </div>
+                    </div>
+                    <!-- Expected Outcome Section -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-box slds-theme_default slds-p-around_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Expected Outcome</h3>
+                            <lightning-formatted-rich-text value={expectedOutcome}></lightning-formatted-rich-text>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+
+</template>

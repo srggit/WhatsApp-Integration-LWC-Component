@@ -1,0 +1,21 @@
+<!-- proposalBudgetPieChart.html -->
+<template>
+    <lightning-card>
+        <div class="header-container slds-grid slds-p-around_medium slds-align_absolute-center slds-justify-between">
+            <h2 class="slds-text-heading_medium">Proposal Budget Distribution</h2>
+            <lightning-combobox
+                name="subDepartment"
+                value={selectedSubDepartmentId}
+                options={subDepartmentOptions}
+                onchange={handleSubDepartmentChange}
+                class="filter-combobox"
+                variant="label-hidden"
+                placeholder="Select Sub-Department">
+            </lightning-combobox>
+        </div>
+
+        <div class="chart-container slds-p-around_medium">
+            <canvas></canvas>
+        </div>
+    </lightning-card>
+</template>

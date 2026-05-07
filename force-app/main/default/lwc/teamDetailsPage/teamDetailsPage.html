@@ -1,0 +1,334 @@
+<template>
+
+    <template if:true={teamData}>
+
+        <div class="slds-box slds-theme_default slds-p-around_medium ">
+            <div class="slds-grid slds-grid_align-spread slds-p-bottom_small">
+                <!-- Left: Team Icon and Name -->
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:team_member" alternative-text="Team"
+                            size="medium"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-text-heading_small">{teamData.teamName}</div>
+                        <div class="slds-text-title_caps slds-text-color_weak">Team</div>
+
+                    </div>
+                </div>
+                <div>
+                    <lightning-button icon-name="utility:back" label="Back" onclick={handleBackClick}
+                        class="slds-m-bottom_medium"></lightning-button>
+                </div>
+            </div>
+
+
+            <!-- Horizontal Data Row -->
+            <div class="slds-grid slds-wrap slds-text-title_bold">
+                <div class="slds-col slds-size_1-of-5">
+                    <div>Total Budget Allotted</div>
+                    <div class="slds-text-title">{formattedBudgetAllocated}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <div>Utilized Budget</div>
+                    <div class="slds-text-title">{formattedBudgetUtilized}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <div>% Utilized</div>
+                    <div class="slds-text-title">{teamData.utilizedPercent}%</div>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <div>Financial Year</div>
+                    <div class="slds-text-title">{teamData.fiscalYear}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <div>Team Head</div>
+                    <div class="slds-text-title">{teamData.teamHead}</div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Tabs Section -->
+        <!-- Grid Wrapper -->
+        <div class="slds-grid slds-wrap slds-m-top_xx-small">
+            <!-- 2/3 Width Column with Full Height and Left Alignment -->
+            <div class="slds-col slds-size_7-of-12 slds-p-right_x-medium">
+                <!-- <lightning-card class="slds-p-around_medium"> -->
+                <div class="budget-detail-view minheight">
+
+                    <lightning-tabset>
+
+                        <!-- Business Goals Tab -->
+
+                        <lightning-tab label="Business Goals">
+                            <div class="slds-box slds-m-bottom_small">
+                                <template if:true={hasBusinessGoals}>
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="slds-text-title_caps slds-p-around_medium"
+                                                    style="width: 50%;" scope="col">
+                                                    <div title="Budget Objective">Budget Objective</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium"
+                                                    style="width: 50%;" scope="col">
+                                                    <div title="Expected Outcome">Expected Outcome</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="slds-line-height_reset">
+                                                <td class="slds-p-around_medium" data-label="Budget Objective">
+                                                    <lightning-formatted-rich-text
+                                                        value={teamData.budgetObjective}></lightning-formatted-rich-text>
+                                                </td>
+                                                <td class="slds-p-around_medium" data-label="Expected Outcome">
+                                                    <lightning-formatted-rich-text
+                                                        value={teamData.expectedOutcome}></lightning-formatted-rich-text>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </template>
+                                <template if:false={hasBusinessGoals}>
+                                    <p class="slds-text-color_weak slds-p-around_medium">No business goals found</p>
+                                </template>
+                            </div>
+                        </lightning-tab>
+
+
+                        <!-- Yearly Activities Tab -->
+
+                        <!-- <lightning-tab label="Yearly Activities">
+                            <!- <div class="slds-box slds-m-bottom_small"> ->
+                                <template if:true={hasYearlyActivities}>
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="ActivityName">Activity Name</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium"
+                                                    style="width: 30%;" scope="col">
+                                                    <div title="ExpectedOutcome">Expected Outcome</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="AskedBudget">Asked Budget</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="TentativeDate">Tentative Date</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="TeamMember">Team Member</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="Expected Revenue">Expected Revenue</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="Approved Budget">Approved Budget</div>
+                                                </th>
+                                                <th class="slds-text-title_caps slds-p-around_medium" scope="col">
+                                                    <div title="Actual Revenue">Actual Revenue</div>
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={teamData.activities} for:item="activity">
+                                                <tr key={activity.id} class="slds-line-height_reset">
+                                                    <td class="slds-p-around_medium" data-label="Activity Name">
+                                                        <div title={activity.name}><strong>{activity.name}</strong>
+                                                        </div>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Expected Outcome">
+                                                        <lightning-formatted-rich-text
+                                                            value={activity.expectedOutcome}></lightning-formatted-rich-text>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Budget">
+                                                        <div title={activity.budget}>₹{activity.budget}</div>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Tentative Date">
+                                                        <div title={activity.tentativeDate}>{activity.formattedDate}
+                                                        </div>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Team Member">
+                                                        <div title={activity.teamMember}>{activity.teamMember}</div>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Expected Revenue">
+                                                        <div title={activity.expectedRevenue}>₹{activity.expectedRevenue}</div>
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Approved Budget">
+                                                        <div title={activity.approvedBudget}>₹{activity.approvedBudget}</div>                                                        
+                                                    </td>
+                                                    <td class="slds-p-around_medium" data-label="Actual Revenue">
+                                                        <div title={activity.actualRevenue}>₹{activity.actualRevenue}</div>                                        
+                                                    </td>
+
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </template>
+
+                                <template if:false={hasYearlyActivities}>
+                                    <p class="slds-text-color_weak slds-p-around_medium">No yearly activities found</p>
+                                </template>
+                            <!- </div> ->
+                        </lightning-tab> -->
+
+
+                        <!-- <lightning-tab label="Yearly Activities">
+                            <template if:true={hasYearlyActivities}>
+                                <lightning-datatable key-field="Id" data={teamData.activities} columns={columns}
+                                    hide-checkbox-column class="slds-m-around_medium">
+                                </lightning-datatable>
+                            </template>
+
+                            <template if:false={hasYearlyActivities}>
+                                <p class="slds-text-color_weak slds-p-around_medium">No yearly activities found</p>
+                            </template>
+                        </lightning-tab> -->
+
+
+
+                        <lightning-tab label="Yearly Activities">
+                            <template if:true={hasYearlyActivities}>
+                                
+                                <!-- <lightning-datatable key-field="id" data={teamData.activities} columns={columns}
+                                    hide-checkbox-column onsave={handleSave} draft-values={draftValues}
+                                    onrowaction={handleRowAction} class="slds-m-around_medium">
+                                </lightning-datatable> -->
+                                <lightning-datatable 
+                                    key-field="id"
+                                    data={pagedActivities}
+                                    columns={columns}
+                                    hide-checkbox-column
+                                    onsave={handleSave}
+                                    draft-values={draftValues}
+                                    onrowaction={handleRowAction}
+                                    class="slds-m-around_medium fixed-header-table">
+                                </lightning-datatable>
+
+                                <div class="slds-m-top_small slds-align_absolute-center">
+                                    <lightning-button label="Previous" onclick={handlePrevious} disabled={disablePrevious}></lightning-button>
+                                    <span class="slds-m-horizontal_medium">Page {currentPage} of {totalPages}</span>
+                                    <lightning-button label="Next" onclick={handleNext} disabled={disableNext}></lightning-button>
+                                </div>
+
+
+                                
+
+                                <template if:true={isModalOpen}>
+                                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                                        <div class="slds-modal__container ">                                        
+                                            <header
+                                                class="slds-modal__header custom-modal-header slds-text-align_center"
+                                                style="position: relative;">
+                                                <!-- Centered Title -->
+                                                <h2 class="slds-modal__title">Expected Outcome</h2>
+
+                                                <!-- Close Button in Top Right -->
+                                                <lightning-button-icon icon-name="utility:close"
+                                                    alternative-text="Close" onclick={closeModal} variant="bare-inverse"
+                                                    size="large" style="position: absolute; right: 1rem; top: 0.75rem;">
+                                                </lightning-button-icon>
+                                            </header>
+
+
+                                            <div class="slds-modal__content slds-p-around_medium">
+                                                <lightning-formatted-rich-text
+                                                    value={modalExpectedOutcome}></lightning-formatted-rich-text>
+                                            </div>                                         
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </template>
+
+                            </template>
+
+                            <template if:false={hasYearlyActivities}>
+                                <p class="slds-text-color_weak slds-p-around_medium">No yearly activities found</p>
+                            </template>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+                <!-- </lightning-card> -->
+            </div>
+
+            <!-- Optional Right Column for spacing or future content -->
+            <div class="slds-col slds-size_5-of-12 slds-p-right_x-small">
+                <div class="uniform-chart-container">
+                    <!-- Budget Given -->
+                    <div class="uniform-chart-card">
+                        <div class="chart-circle given">
+                            <div class="chart-inner">
+                                <div class="chart-amount">{formattedBudgetAllocated}</div>
+                            </div>
+                        </div>
+                        <div class="chart-title">Budget Given</div>
+                    </div>
+
+                    <!-- Utilized Budget -->
+                    <div class="uniform-chart-card">
+                        <div class="chart-circle utilized">
+                            <div class="chart-inner">
+                                <div class="chart-amount">{formattedBudgetUtilized}</div>
+                            </div>
+                        </div>
+                        <div class="chart-title">Utilized Budget</div>
+                    </div>
+
+                    <!-- Percentage Utilized -->
+                    <div class="uniform-chart-card">
+                        <div class="chart-circle percentage">
+                            <div class="chart-inner">
+                                <div class="chart-amount">{teamData.utilizedPercent}%</div>
+                            </div>
+                        </div>
+                        <div class="chart-title">Utilized Budget %</div>
+                    </div>
+                </div>
+                <!-- Upcoming Schedule -->
+                <div class="slds-box slds-m-top_medium white-background">
+
+                    <div class="slds-text-heading_small slds-m-bottom_small">Upcoming Schedule</div>
+
+                    <div class="scrollable-schedule">
+                        <template if:true={upcomingSchedule}>
+                            <template if:true={upcomingSchedule.length}>
+                                <ul class="slds-has-dividers_bottom-space">
+                                    <template for:each={upcomingSchedule} for:item="item">
+                                        <li key={item.id} class="slds-item">
+                                            <div class="slds-media slds-media_center slds-p-vertical_x-small">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon icon-name="standard:event"
+                                                        size="x-small"></lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <p class="slds-text-title_bold">{item.name}</p>
+                                                    <p class="slds-text-body_small">{item.formattedDate}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template if:false={upcomingSchedule.length}>
+                                <p class="slds-text-color_weak">No upcoming activities scheduled</p>
+                            </template>
+                        </template>
+                        <template if:false={upcomingSchedule}>
+                            <p class="slds-text-color_weak">Loading upcoming schedule...</p>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Calculator Inputs" icon-name="utility:calculator">
+        <div class="slds-p-around_medium">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                    <lightning-input
+                        type="number"
+                        label="First Number"
+                        value={firstNumber}
+                        onchange={handleFirstNumberChange}
+                        variant="standard"
+                    ></lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                    <lightning-input
+                        type="number"
+                        label="Second Number"
+                        value={secondNumber}
+                        onchange={handleSecondNumberChange}
+                        variant="standard"
+                    ></lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

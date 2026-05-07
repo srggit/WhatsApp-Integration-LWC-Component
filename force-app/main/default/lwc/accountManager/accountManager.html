@@ -1,0 +1,16 @@
+<template>
+    <lightning-button 
+        label="New Account"
+        onclick={openCreate}>
+    </lightning-button>
+
+    <template if:true={showEditor}>
+        <c-ul-record-editor
+            object-api-name="Account"
+            fields={fields}
+            mode="create"
+            onsuccess={handleSuccess}
+            oncancel={handleCancel}>
+        </c-ul-record-editor>
+    </template>
+</template>

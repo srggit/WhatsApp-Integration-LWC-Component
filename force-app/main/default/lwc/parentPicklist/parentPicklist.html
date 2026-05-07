@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="Parent Component">
+        <div class="slds-p-around_medium">
+            <lightning-combobox
+                name="inputSelection"
+                label="Select Input to Show"
+                value={selectedValue}
+                placeholder="-- Select an Option --"
+                options={picklistOptions}
+                onchange={handlePicklistChange}
+            ></lightning-combobox>
+        </div>
+    </lightning-card>
+    
+    <!-- Child Component -->
+    <c-child-input-fields 
+        selected-input={selectedValue}
+    ></c-child-input-fields>
+</template>

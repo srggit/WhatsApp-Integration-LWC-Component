@@ -1,0 +1,32 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-wrap slds-p-around_medium slds-theme_default" style="background-color: #f4f6f9;">
+            <!-- First Row -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <div class="chart-container">
+                    <c-yearly-budget-chart></c-yearly-budget-chart>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <div class="chart-container">
+                    <c-parent-department-chart ondepartmentdatachange={handleDepartmentDataChange}></c-parent-department-chart>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <div class="chart-container">
+                    <c-department-budget-pie-chart
+                        department-list={departmentList}
+                        onsubdepartmentdatachange={handleSubDepartmentDataChange}>
+                    </c-department-budget-pie-chart>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <div class="chart-container">
+                    <c-proposal-budget-pie-chart sub-department-list={subDepartmentList}></c-proposal-budget-pie-chart>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

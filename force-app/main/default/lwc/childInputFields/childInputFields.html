@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Child Component">
+        <div class="slds-p-around_medium">
+            <!-- Input 1: Name -->
+            <template if:true={showInput1}>
+                <lightning-input
+                    label="Name"
+                    type="text"
+                    placeholder="Enter your name"
+                ></lightning-input>
+            </template>
+
+            <!-- Input 2: Phone -->
+            <template if:true={showInput2}>
+                <lightning-input
+                    label="Phone"
+                    type="tel"
+                    placeholder="Enter your phone number"
+                ></lightning-input>
+            </template>
+
+            <!-- Input 3: Email -->
+            <template if:true={showInput3}>
+                <lightning-input
+                    label="Email"
+                    type="email"
+                    placeholder="Enter your email address"
+                ></lightning-input>
+            </template>
+
+            <!-- No Selection Message -->
+            <template if:false={hasSelection}>
+                <div class="slds-text-align_center slds-text-color_weak">
+                    Select an option from the parent component
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,65 @@
+<template>
+    <lightning-card title="Quick Calculator" icon-name="utility:formula">
+        <div class="slds-p-around_medium">
+            <!-- Child Component -->
+            <c-calculator-inputs onvalueschange={handleValuesChange}></c-calculator-inputs>
+
+            <!-- Operation Buttons -->
+            <div class="slds-m-top_medium">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                        <lightning-button
+                            variant="brand"
+                            label="Add"
+                            onclick={handleAdd}
+                            class="slds-m-right_small full-width"
+                            icon-name="utility:add"
+                        ></lightning-button>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                        <lightning-button
+                            variant="brand"
+                            label="Subtract"
+                            onclick={handleSubtract}
+                            class="slds-m-right_small full-width"
+                            icon-name="utility:dash"
+                        ></lightning-button>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                        <lightning-button
+                            variant="brand"
+                            label="Multiply"
+                            onclick={handleMultiply}
+                            class="slds-m-right_small full-width"
+                            icon-name="utility-close"
+                        ></lightning-button>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                        <lightning-button
+                            variant="brand"
+                            label="Divide"
+                            onclick={handleDivide}
+                            class="full-width"
+                            icon-name="utility:keyboard_dismiss"
+                        ></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <!-- Result Display -->
+            <div class="slds-m-top_medium">
+                <lightning-input
+                    type="text"
+                    label="Result"
+                    value={result}
+                    readonly
+                    variant="standard"
+                    class="result-field"
+                ></lightning-input>
+            </div>
+        </div>
+    </lightning-card>
+</template>

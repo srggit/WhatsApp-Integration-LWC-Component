@@ -1,0 +1,89 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" aria-modal="true">
+            <div class="slds-modal__container custom-modal-size">
+                <!-- Modal Header -->
+                <header class="slds-modal__header custom-modal-header">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center">
+                        <div class="modal-header-title-container">
+                            <h2 class="slds-modal__title slds-text-heading_medium slds-text-color_inverse">
+                                <strong>Add Department</strong>
+                            </h2>
+                            <div class="modal-title-underline"></div>
+                        </div>
+                    </div>
+                </header>
+
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:false={isLoading}>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Department Name -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input label="Department Name" required value={departmentData.name}
+                                    onchange={handleInputChange} data-field="name" class="slds-m-bottom_small"
+                                    placeholder="Enter department name">
+                                </lightning-input>
+                            </div>
+
+                            <!-- Department Head -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-combobox label="Department Head" required
+                                    value={departmentData.departmentHeadId} options={userOptions}
+                                    onchange={handleInputChange} data-field="departmentHeadId"
+                                    placeholder="Select Department Head" class="slds-m-bottom_small">
+                                </lightning-combobox>
+                            </div>
+
+                            <!-- Team Name -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input label="Team Name" required value={departmentData.teamName}
+                                    onchange={handleInputChange} data-field="teamName" class="slds-m-bottom_small"
+                                    placeholder="Enter team name">
+                                </lightning-input>
+                            </div>
+
+                            <!-- No of Members -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input type="number" label="No of Members" required min="1"
+                                    value={departmentData.noOfMembers} onchange={handleInputChange}
+                                    data-field="noOfMembers" class="slds-m-bottom_small"
+                                    placeholder="Enter number of members">
+                                </lightning-input>
+                            </div>
+
+                            <!-- Region -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input label="Region" required value={departmentData.region}
+                                    onchange={handleInputChange} data-field="region" class="slds-m-bottom_small"
+                                    placeholder="Enter region">
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={isLoading}>
+                        <div class="slds-text-align_center slds-p-vertical_large">
+                            <lightning-spinner alternative-text="Saving department..."
+                                size="medium"></lightning-spinner>
+                            <p class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                                Creating department...
+                            </p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer slds-text-align_center">
+                    <lightning-button label="Cancel" onclick={handleClose} class="slds-m-right_small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button label="Save Department" variant="brand" onclick={handleSave} disabled={isLoading}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
