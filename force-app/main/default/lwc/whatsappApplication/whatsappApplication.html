@@ -1,33 +1,41 @@
 <template>
-    <div class="whatsapp-container">
+    <div class={containerClass}>
         <!-- Left Panel - Contact List -->
         <div class="left-panel">
             <!-- Header -->
             <div class="panel-header">
                 <div class="user-profile">
                     <div class="avatar-large">
-                        <!-- <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User"
-                            class="avatar-img"> -->
                         <lightning-icon icon-name="standard:whatsapp" size="large"></lightning-icon>
                     </div>
+
                     <div class="user-info">
                         <div class="username">WhatsApp Business</div>
                         <div class="user-status">Online</div>
                     </div>
-                    <div class="header-icons">
 
-                        <lightning-icon icon-name="standard:groups" size="small" onclick={handleGroupsClick}
-                            style="cursor: pointer;"></lightning-icon>
-                        <lightning-icon icon-name="utility:settings" size="small"
-                            style="cursor: pointer;"></lightning-icon>
+                    <div class="header-icons">
+                        <button class="icon-button" type="button" onclick={handleGroupsClick} title="Groups">
+                            <lightning-icon icon-name="standard:groups" size="x-small"></lightning-icon>
+                        </button>
+
+                        <button class="icon-button" type="button" onclick={toggleTheme} title="Toggle theme">
+
+                            <template if:true={isDarkMode}>
+                                ☀️
+                            </template>
+
+                            <template if:false={isDarkMode}>
+                                🌙
+                            </template>
+
+                        </button>
+
+                        <button class="icon-button" type="button" title="Settings">
+                            <lightning-icon icon-name="utility:settings" size="x-small"></lightning-icon>
+                        </button>
                     </div>
                 </div>
-
-                <!-- Notifications Badge -->
-                <!-- <div class="notifications-badge">
-                    <lightning-icon icon-name="utility:notification" size="xx-small"></lightning-icon>
-                    <span class="badge-text">Enable Notifications</span>
-                </div> -->
 
                 <!-- Search/Filter Bar -->
                 <div class="search-container">
@@ -38,17 +46,6 @@
 
                 <!-- Teams / Categories -->
                 <div class="teams-section">
-                    <!-- <div class="teams-header">
-                        <span>My Teams</span>
-                        <lightning-icon icon-name="utility:chevronright" size="xx-small"></lightning-icon>
-                    </div> -->
-                    <!-- <div class="team-chips">
-                        <span class="team-chip">XTC</span>
-                        <span class="team-chip">Gasax</span>
-                        <span class="team-chip">Sobis</span>
-                        <span class="team-chip active">FIX</span>
-                        <span class="team-chip">+2</span>
-                    </div> -->
                     <div class="chats-count">
                         <span>Chats</span>
                         <strong>{filteredContacts.length}</strong>
@@ -84,7 +81,8 @@
 
                             <!-- Time & Status -->
                             <div class="contact-meta">
-                                <div class={contact.timeClass}>{contact.lastMessageTime}
+                                <div class={contact.timeClass}>
+                                    {contact.lastMessageTime}
                                 </div>
                                 <div class="unread-badge" if:true={contact.unreadCount}>
                                     {contact.unreadCount}
@@ -117,11 +115,11 @@
                     <span>{selectedCount} selected</span>
                 </div>
                 <div class="bulk-actions">
-                    <button class="bulk-send-btn" onclick={openBulkMessageModal}>
+                    <button class="bulk-send-btn" onclick={openBulkMessageModal} type="button">
                         <lightning-icon icon-name="utility:send" size="x-small"></lightning-icon>
                         Send Message
                     </button>
-                    <button class="bulk-clear-btn" onclick={clearSelection}>
+                    <button class="bulk-clear-btn" onclick={clearSelection} type="button">
                         Clear
                     </button>
                 </div>
@@ -133,22 +131,26 @@
                     <div class="chat-contact-info">
                         <div class="contact-avatar-small">
                             <div class="avatar-initials-sm">{selectedContact.initials}</div>
-                            <span class="online-dot-sm {selectedContact.isOnline ? 'online' : 'offline'}"></span>
+                            <span class={selectedContactStatusClass}></span>
                         </div>
                         <div class="chat-contact-details">
                             <div class="chat-contact-name">{selectedContact.Name}</div>
-                            <div class="chat-contact-status">
+                            <div class={chatStatusClass}>
                                 {lastSeenLabel}
                             </div>
                         </div>
                     </div>
+
                     <div class="chat-actions">
-                        <lightning-icon icon-name="utility:video" size="small"
-                            onclick={handleVideoCall}></lightning-icon>
-                        <lightning-icon icon-name="utility:call" size="small"
-                            onclick={handleVoiceCall}></lightning-icon>
-                        <lightning-icon icon-name="utility:down" size="small"
-                            onclick={handleMenuClick}></lightning-icon>
+                        <button class="icon-button" type="button" onclick={handleVideoCall} title="Video call">
+                            <lightning-icon icon-name="utility:video" size="x-small"></lightning-icon>
+                        </button>
+                        <button class="icon-button" type="button" onclick={handleVoiceCall} title="Voice call">
+                            <lightning-icon icon-name="utility:call" size="x-small"></lightning-icon>
+                        </button>
+                        <button class="icon-button" type="button" onclick={handleMenuClick} title="More">
+                            <lightning-icon icon-name="utility:down" size="x-small"></lightning-icon>
+                        </button>
                     </div>
                 </div>
             </template>
@@ -160,8 +162,10 @@
                         <lightning-icon icon-name="standard:whatsapp" size="large"></lightning-icon>
                         <h3>WhatsApp Business</h3>
                         <p>Select a contact to start chatting</p>
-                        <button if:true={selectedCount} class="bulk-start-btn" onclick={openBulkMessageModal}>
-                            Send Message to {selectedCount} {selectedCount == 1 ? 'Contact' : 'Contacts'}
+
+                        <button if:true={hasSelectedCount} class="bulk-start-btn" onclick={openBulkMessageModal}
+                            type="button">
+                            Send Message to {selectedCount} {bulkTargetLabel}
                         </button>
                     </div>
                 </div>
@@ -169,13 +173,12 @@
 
             <!-- Messages Area -->
             <div if:true={selectedContact} class="chat-body">
-
                 <template for:each={messages} for:item="item">
 
                     <!-- DATE -->
                     <template if:true={item.isDate}>
                         <div key={item.Id} class="date-separator">
-                            <span> {item.label} </span>
+                            <span>{item.label}</span>
                         </div>
                     </template>
 
@@ -183,7 +186,6 @@
                     <template if:true={item.isMessage}>
                         <div key={item.Id} class={item.cssClass}>
                             <div class="message-bubble">
-
                                 <div class="message-text">
                                     {item.Message_Text__c}
                                 </div>
@@ -192,44 +194,41 @@
                                     <span>{item.time}</span>
                                     <span class={item.statusClass}>{item.statusIcon}</span>
                                 </div>
-
                             </div>
                         </div>
                     </template>
 
                 </template>
 
-                <template if:false={messages.length}>
+                <template if:false={hasMessages}>
                     <div class="no-messages-placeholder">
-
                         <div class="empty-chat-card">
                             <div class="empty-icon">💬</div>
-
                             <div class="empty-title">No messages yet</div>
-
                             <div class="empty-subtitle">
                                 Start the conversation by sending a message
                             </div>
                         </div>
-
                     </div>
                 </template>
-
             </div>
 
             <!-- Message Input -->
             <div if:true={selectedContact} class="message-input-area">
-                <lightning-icon icon-name="utility:emoji" size="small" onclick={handleEmojiClick}></lightning-icon>
-                <lightning-icon icon-name="utility:attach" size="small"></lightning-icon>
+                <button class="icon-button input-icon" type="button" onclick={handleEmojiClick} title="Emoji">
+                    <lightning-icon icon-name="utility:emoji" size="x-small"></lightning-icon>
+                </button>
+                <button class="icon-button input-icon" type="button" title="Attach">
+                    <lightning-icon icon-name="utility:attach" size="x-small"></lightning-icon>
+                </button>
+
                 <div class="input-wrapper">
-                    <!-- <textarea placeholder="Type a message" value={newMessage} oninput={handleChange}
-                        onkeypress={handleKeyPress} rows="1">
-                    </textarea> -->
                     <textarea placeholder="Type a message" value={newMessage} oninput={handleInput}
                         onkeydown={handleKeyDown} rows="1">
                     </textarea>
                 </div>
-                <button class="send-btn" onclick={handleSend} disabled={isSendDisabled}>
+
+                <button class="send-btn" onclick={handleSend} disabled={isSendDisabled} type="button">
                     <lightning-icon icon-name="utility:send" size="x-small"></lightning-icon>
                 </button>
             </div>
@@ -238,51 +237,44 @@
         <!-- Right Sidebar - Contact Info -->
         <template if:true={selectedContact}>
             <div class="info-panel">
-
                 <!-- Profile -->
                 <div class="info-profile">
-
                     <div class="info-avatar">
                         <div class="avatar-large-circle">
                             {selectedContact.initials}
                         </div>
-
-                        <span class="profile-online"></span>
+                        <span class={profileOnlineClass}></span>
                     </div>
 
                     <div class="info-name">
                         {selectedContact.Name}
                     </div>
 
-                    <div class="info-status">
+                    <div class={chatStatusClass}>
                         {lastSeenLabel}
                     </div>
-
                 </div>
 
                 <!-- Actions -->
                 <div class="info-actions">
-
-                    <div class="info-action">
+                    <button class="info-action" type="button">
                         <lightning-icon icon-name="utility:call" size="small"></lightning-icon>
                         <span>Call</span>
-                    </div>
+                    </button>
 
-                    <div class="info-action">
+                    <button class="info-action" type="button">
                         <lightning-icon icon-name="utility:chat" size="small"></lightning-icon>
                         <span>Message</span>
-                    </div>
+                    </button>
 
-                    <div class="info-action">
+                    <button class="info-action" type="button">
                         <lightning-icon icon-name="utility:threedots" size="small"></lightning-icon>
                         <span>More</span>
-                    </div>
-
+                    </button>
                 </div>
 
                 <!-- Contact Details -->
                 <div class="info-section">
-
                     <div class="info-section-title">
                         Contact Information
                     </div>
@@ -296,29 +288,23 @@
                         <span class="info-label">Name</span>
                         <span class="info-value">{selectedContact.Name}</span>
                     </div>
-
                 </div>
 
                 <!-- Media Section -->
                 <div class="info-section">
-
                     <div class="info-section-title">
                         Media, Links and Docs
                     </div>
 
                     <div class="media-grid">
-
                         <div class="media-box"></div>
                         <div class="media-box"></div>
                         <div class="media-box"></div>
                         <div class="media-box"></div>
                         <div class="media-box"></div>
                         <div class="media-box"></div>
-
                     </div>
-
                 </div>
-
             </div>
         </template>
     </div>
@@ -329,8 +315,11 @@
             <div class="modal-container" onclick={stopPropagation}>
                 <div class="modal-header">
                     <h3>Send Message to {selectedCount} Contacts</h3>
-                    <lightning-icon icon-name="utility:close" size="small" onclick={closeModal}></lightning-icon>
+                    <button class="icon-button" type="button" onclick={closeModal} title="Close">
+                        <lightning-icon icon-name="utility:close" size="x-small"></lightning-icon>
+                    </button>
                 </div>
+
                 <div class="modal-body">
                     <div class="selected-contacts-list">
                         <template for:each={selectedContactsList} for:item="contact">
@@ -339,13 +328,15 @@
                             </span>
                         </template>
                     </div>
+
                     <textarea class="bulk-message-input" placeholder="Type your message here..." value={bulkMessage}
                         onchange={handleBulkMessageChange}>
                     </textarea>
                 </div>
+
                 <div class="modal-footer">
-                    <button class="modal-cancel-btn" onclick={closeModal}>Cancel</button>
-                    <button class="modal-send-btn" onclick={sendBulkMessage}>
+                    <button class="modal-cancel-btn" onclick={closeModal} type="button">Cancel</button>
+                    <button class="modal-send-btn" onclick={sendBulkMessage} type="button">
                         Send to All
                     </button>
                 </div>

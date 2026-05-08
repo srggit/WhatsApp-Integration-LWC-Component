@@ -8,6 +8,7 @@ import markChatAsRead from '@salesforce/apex/WhatsAppController.markChatAsRead';
 import { subscribe } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+
 export default class WhatsappApp extends LightningElement {
 
     // ================= STATE =================
@@ -32,9 +33,18 @@ export default class WhatsappApp extends LightningElement {
     hasMoreData = true;
 
     isSearchMode = false;
+    onlineTimeout;
 
     // ================= INIT =================
     connectedCallback() {
+
+        try {
+            const savedTheme = window.localStorage.getItem('wa-theme');
+            this.isDarkMode = savedTheme === 'dark';
+        } catch (e) {
+            // Ignore localStorage issues in restricted environments
+        }
+
         this.loadContacts();
         this.subscribeToEvent();
     }
@@ -127,7 +137,7 @@ export default class WhatsappApp extends LightningElement {
                     hasUnreadMessages: w.hasUnreadMessages || false,
                     unreadCount: w.unreadCount || 0,
                     isOnline: false,
-                    onlineClass: 'online-dot offline',
+                    onlineClass: false,
                     messageClass: w.hasUnreadMessages ? 'contact-last-message unread' : 'contact-last-message read',
                     timeClass: w.hasUnreadMessages ? 'message-time unread' : 'message-time read'
                 }));
@@ -410,48 +420,48 @@ export default class WhatsappApp extends LightningElement {
     renderMessages() {
         debugger;
         const container = this.template.querySelector('.chat-body');
-
+    
         if (!container) {
             console.error('chat-body not found');
             return;
         }
-
+    
         container.innerHTML = '';
-
+    
         if (!this.messages.length) {
             container.innerHTML = `<div class="no-messages-placeholder"><p>No messages yet</p></div>`;
             return;
         }
-
+    
         this.messages.forEach(msg => {
-
+    
             const wrapper = document.createElement('div');
             wrapper.className = `msg ${msg.Direction__c === 'Inbound' ? 'inbound' : 'outbound'}`;
-
+    
             const bubble = document.createElement('div');
             bubble.className = 'message-bubble';
-
+    
             const text = document.createElement('div');
             text.className = 'message-text';
             text.innerText = msg.Message_Text__c;
-
+    
             const meta = document.createElement('div');
             meta.className = 'message-meta';
-
+    
             meta.innerHTML = `
                 <span>${this.formatTime(msg.CreatedDate)}</span>
                 <span class="message-status ${msg.Message_Delivery_Status__c === 'read' ? 'message-status-read' : ''}">
                     ${this.getStatusIcon(msg.Message_Delivery_Status__c)}
                 </span>
             `;
-
+    
             bubble.appendChild(text);
             bubble.appendChild(meta);
             wrapper.appendChild(bubble);
-
+    
             container.appendChild(wrapper);
         });
-
+    
         this.scrollToBottom();
     }
     */
@@ -628,7 +638,9 @@ export default class WhatsappApp extends LightningElement {
 
                         timeClass: hasUnread
                             ? 'message-time unread'
-                            : 'message-time read'
+                            : 'message-time read',
+
+                        onlineClass: 'online-dot online'
                     };
                 }
 
@@ -684,7 +696,9 @@ export default class WhatsappApp extends LightningElement {
 
                             timeClass: hasUnread
                                 ? 'message-time unread'
-                                : 'message-time read'
+                                : 'message-time read',
+
+                            onlineClass: 'online-dot online'
                         };
                     }
                     console.log('###### filteredContacts', JSON.stringify(this.filteredContacts));
@@ -692,6 +706,36 @@ export default class WhatsappApp extends LightningElement {
                     return c;
                 });
 
+            setTimeout(() => {
+
+                this.contacts = this.contacts.map(c => {
+
+                    if (c.Phone === payload.Phone__c) {
+
+                        return {
+                            ...c,
+                            onlineClass: 'online-dot offline'
+                        };
+                    }
+
+                    return c;
+                });
+
+                this.filteredContacts =
+                    this.filteredContacts.map(c => {
+
+                        if (c.Phone === payload.Phone__c) {
+
+                            return {
+                                ...c,
+                                onlineClass: 'online-dot offline'
+                            };
+                        }
+
+                        return c;
+                    });
+
+            }, 60000);
 
             // If event belongs to another chat, only update contact preview
             if (
@@ -718,6 +762,15 @@ export default class WhatsappApp extends LightningElement {
                             error
                         );
                     });
+
+                // ============================================
+                // Realtime last seen update
+                // ============================================
+                debugger;
+                this.lastSeenLabel = 'Online';
+                //this.isContactOnline = true;
+                this.setContactOnline();
+
             }
 
             // ============================================
@@ -804,12 +857,16 @@ export default class WhatsappApp extends LightningElement {
             // ============================================
             this.messages = this.prepareMessagesWithDate(onlyMessages);
 
+            // ============================================
+            // STEP 5 — Scroll to bottom
+            // ============================================
             this.scrollToBottom();
         });
     }
 
     // ================= LAST SEEN =================
     loadLastSeen() {
+        debugger;
         getLastSeen({ phone: this.selectedContact.Phone })
             .then(res => {
                 this.lastSeenLabel = this.formatLastSeen(res);
@@ -820,6 +877,7 @@ export default class WhatsappApp extends LightningElement {
     }
 
     formatLastSeen(dateTime) {
+        this.isContactOnline = false;
 
         if (!dateTime) {
             return 'Last seen not available';
@@ -834,7 +892,9 @@ export default class WhatsappApp extends LightningElement {
 
         // Just now
         if (diffMinutes < 1) {
-            return 'Last seen just now';
+            //this.isContactOnline = true;
+            this.setContactOnline();
+            return 'Online';
         }
 
         // Minutes ago
@@ -1239,4 +1299,126 @@ export default class WhatsappApp extends LightningElement {
         event.stopPropagation();
     }
 
+    @track isDarkMode = false;
+
+    get containerClass() {
+        return `whatsapp-container ${this.isDarkMode ? 'theme-dark' : 'theme-light'}`;
+    }
+
+    get themeIcon() {
+        return this.isDarkMode ? 'utility:brightness_high' : 'utility:brightness_low';
+    }
+
+    get hasMessages() {
+        return Array.isArray(this.messages) && this.messages.length > 0;
+    }
+
+    get hasSelectedCount() {
+        return (this.selectedCount || 0) > 0;
+    }
+
+    get bulkTargetLabel() {
+        return this.selectedCount === 1 ? 'Contact' : 'Contacts';
+    }
+
+    // get selectedContactStatusClass() {
+    //     if (!this.selectedContact) {
+    //         return 'online-dot-sm offline';
+    //     }
+    //     return this.selectedContact.isOnline ? 'online-dot-sm online' : 'online-dot-sm offline';
+    // }
+
+    get selectedContactStatusClass() {
+
+        if (!this.selectedContact) {
+            return 'online-dot-sm offline';
+        }
+
+        return this.isContactOnline
+            ? 'online-dot-sm online'
+            : 'online-dot-sm offline';
+    }
+
+    get showProfileStatusClass() {
+        return this.isContactOnline
+            ? 'profile-online'
+            : 'profile-offline';
+    }
+
+    get profileOnlineClass() {
+
+        return this.isContactOnline
+            ? 'profile-online online'
+            : 'profile-online offline';
+    }
+
+    get noContacts() {
+        return !this.filteredContacts || this.filteredContacts.length === 0;
+    }
+
+    toggleTheme() {
+        this.isDarkMode = !this.isDarkMode;
+
+        try {
+            window.localStorage.setItem('wa-theme', this.isDarkMode ? 'dark' : 'light');
+        } catch (e) {
+            // Ignore
+        }
+    }
+    get chatStatusClass() {
+
+        return this.isContactOnline
+            ? 'chat-contact-status online'
+            : 'chat-contact-status';
+    }
+
+    setContactOnline() {
+
+        // Make online immediately
+        this.isContactOnline = true;
+
+        // Clear previous timer
+        if (this.onlineTimeout) {
+            clearTimeout(this.onlineTimeout);
+        }
+
+        // Auto offline after 1 minute
+        this.onlineTimeout = setTimeout(() => {
+
+            this.isContactOnline = false;
+
+            // Refresh label again
+            this.loadLastSeen();
+
+        }, 60000); // 60 sec
+    }
+
+    setContactOnline() {
+
+        // Make online immediately
+        this.isContactOnline = true;
+
+        // Clear previous timer
+        if (this.onlineTimeout) {
+            clearTimeout(this.onlineTimeout);
+        }
+
+        // Auto offline after 1 minute
+        this.onlineTimeout = setTimeout(() => {
+
+            this.isContactOnline = false;
+
+            // Refresh label again
+            this.loadLastSeen();
+
+        }, 60000); // 60 sec
+    }
+
+    disconnectedCallback() {
+
+        if (this.onlineTimeout) {
+            clearTimeout(this.onlineTimeout);
+        }
+    }
 }
+

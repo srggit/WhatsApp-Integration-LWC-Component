@@ -314,7 +314,7 @@ public with sharing class WhatsAppController {
     }
 
     // Get last seen time of the customer
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Datetime getLastSeen(String phone) {
 
         List<WhatsApp_Messages__c> msgs = [
@@ -340,7 +340,7 @@ public with sharing class WhatsAppController {
             req.setEndpoint('https://graph.facebook.com/v25.0/935200896346534/messages');
             req.setMethod('POST');
 
-            req.setHeader('Authorization', 'Bearer EAA34Pw2xSHYBRVHxjTVwCVd3RnpZCG7QbAHJNdnf5AWZAibFZCWTLDBO1euKi2bDyQOD4E7QhK1H2gQdaTsSM4UeAejFAEUI6x5spiCbnHW1fpvqFAka7WCD3xPLc4ADUSWw58zceGpY6j3bo466bj1Ihf8unFwTSZAxZAvKTD5NKZCeSIdWvUNZAsD5QrIZCPhZChzXN8AbRijMx4uTXTZAMKORxroaYAQnHoXZCesBdFuTMVZCyyn1L8FSzm09NsFwuXnxD9DFlhIXm67uIhbITi9uk6ap2QZDZD');
+            req.setHeader('Authorization', 'Bearer EAA34Pw2xSHYBRTWOOUWvUNoQZAmNw65K1A8ImIMkBP8qM6FIceqjesxaAil6hp7aqzSOvqrhevUeBW8njEuXtiooFuH6x7lSCmYeOt0axqW7xBMfNh22CuFrbbjw8fDRscL30wmoon49PiDajSyVbmiJ7eXKYp16iYmnTTdbWfGEmLbkZA0eaHrKwc0EulPkRjpFejUhdSZAnvxtPzS6WJEQI9ZBCjAvHzPPenr5tmI2xxT6mqdjF2WCDI2WIHpCeFuDZAJFbUZAFI8OCV2vL4O0XlAdwZD');
             req.setHeader('Content-Type', 'application/json');
 
             Map<String, Object> bodyMap = new Map<String, Object>{
