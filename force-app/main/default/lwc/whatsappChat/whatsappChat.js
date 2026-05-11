@@ -414,7 +414,7 @@ export default class WhatsappChat extends LightningElement {
         const textarea = this.template.querySelector('textarea');
         if (textarea) textarea.value = '';
 
-        // Send API call
+        // Send API call using Meta API
         sendMessage({
             phone: this.selectedContact.Phone,
             message: messageToSend,

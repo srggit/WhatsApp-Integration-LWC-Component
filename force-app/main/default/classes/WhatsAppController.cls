@@ -88,6 +88,7 @@ public with sharing class WhatsAppController {
         @AuraEnabled public String deliveryStatus;
         @AuraEnabled public Boolean hasUnreadMessages;
         @AuraEnabled public Integer unreadCount;
+        @AuraEnabled public Datetime lastInboundMessageTime;
     }
 
     @AuraEnabled
@@ -135,7 +136,7 @@ public with sharing class WhatsAppController {
                     CreatedDate,
                     LastActivityDate,
                     Last_Chat_Opened_At__c
-                FROM Contact
+                    FROM Contact
                 WHERE Phone != null
                 AND CreatedDate < :lastContact.CreatedDate
                 ORDER BY CreatedDate DESC NULLS FIRST
@@ -159,7 +160,7 @@ public with sharing class WhatsAppController {
         // ============================================
         // STEP 3 — GET ALL MESSAGES
         // ============================================
-
+        Map<String, Datetime> latestInboundMap = new Map<String, Datetime>();
         Map<String, WhatsApp_Messages__c> latestMessageMap = new Map<String, WhatsApp_Messages__c>();
         Map<String, Integer> unreadCountMap = new Map<String, Integer>();
 
@@ -194,9 +195,15 @@ public with sharing class WhatsAppController {
                 // ============================================
                 // LATEST MESSAGE
                 // ============================================
-
                 if (!latestMessageMap.containsKey(msg.Phone__c)) {
                     latestMessageMap.put(msg.Phone__c, msg);
+                }
+
+                // ============================================
+                // Latest inbound tracking
+                // ============================================
+                if (msg.Direction__c == 'Inbound' && !latestInboundMap.containsKey(msg.Phone__c)) {
+                    latestInboundMap.put(msg.Phone__c, msg.CreatedDate);
                 }
 
                 // ============================================
@@ -256,6 +263,7 @@ public with sharing class WhatsAppController {
                 wrapper.lastMessageTime = msg.CreatedDate;
                 wrapper.direction = msg.Direction__c;
                 wrapper.deliveryStatus = msg.Message_Delivery_Status__c;
+                wrapper.lastInboundMessageTime = latestInboundMap.containsKey(con.Phone) ? latestInboundMap.get(con.Phone) : null;
             }
 
             wrappers.add(wrapper);
@@ -340,7 +348,7 @@ public with sharing class WhatsAppController {
             req.setEndpoint('https://graph.facebook.com/v25.0/935200896346534/messages');
             req.setMethod('POST');
 
-            req.setHeader('Authorization', 'Bearer EAA34Pw2xSHYBRTWOOUWvUNoQZAmNw65K1A8ImIMkBP8qM6FIceqjesxaAil6hp7aqzSOvqrhevUeBW8njEuXtiooFuH6x7lSCmYeOt0axqW7xBMfNh22CuFrbbjw8fDRscL30wmoon49PiDajSyVbmiJ7eXKYp16iYmnTTdbWfGEmLbkZA0eaHrKwc0EulPkRjpFejUhdSZAnvxtPzS6WJEQI9ZBCjAvHzPPenr5tmI2xxT6mqdjF2WCDI2WIHpCeFuDZAJFbUZAFI8OCV2vL4O0XlAdwZD');
+            req.setHeader('Authorization', 'Bearer EAA34Pw2xSHYBRYWUYt4Wjb3yzuXa6IHZBzFV7ygT8gXDQ2ZAvrZB1Jb9EKd1rCWSy855JUPXTMqBqyR8ZBZABixtkJugpWHv69X3xwnFafdZCcpxZCrZBJAVNqltjmZBH81DSld32UXLJPS77QzADS27eg1Sob4nSvNNCF2PRtzCiBTTGiZBt6sfhfU9mb7qLrmiKUGrk0UZB9XMn4J7RXxRrMoe8fuLnxEAoe5mclljcN7jcD7I21N5uwf5pE1cdJ5x9ckzulyfLOrSZCtSS3mHgjNiYnJS');
             req.setHeader('Content-Type', 'application/json');
 
             Map<String, Object> bodyMap = new Map<String, Object>{
@@ -430,9 +438,10 @@ public with sharing class WhatsAppController {
         }
     }
 
+    // ========================== INFOBIP API ========================== //
     /*
     @AuraEnabled
-    public static void sendMessage(String phone, String message) {
+    public static void sendMessageUsingInfobip(String phone, String message) {
         // Infobip API call
         HttpRequest req = new HttpRequest();
         req.setEndpoint('https://8vrkpd.api.infobip.com/whatsapp/1/message/text');
