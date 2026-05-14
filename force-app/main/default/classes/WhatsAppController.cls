@@ -439,19 +439,137 @@ public with sharing class WhatsAppController {
     }
 
     // ========================== INFOBIP API ========================== //
+    @AuraEnabled
+    public static void sendMessageUsingInfobip(String phone, String message, Id contactId) {
+    
+        System.debug('################## sendMessageUsingInfobip() Executed ##################');
+    
+        try {
+    
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('https://rk382y.api-in.infobip.com/whatsapp/1/message/text');
+            req.setMethod('POST');
+    
+            req.setHeader(
+                'Authorization', 'App e4f7246c76fe62841697c0923eb1d0fe-b647ca14-03e9-46d5-9f4d-70261a9987f3'
+            );
+    
+            req.setHeader('Content-Type', 'application/json');
+    
+            String body = JSON.serialize(new Map<String, Object>{
+                'from' => '447860099299',
+                'to' => phone,
+                'content' => new Map<String, String>{
+                    'text' => message
+                }
+            });
+    
+            System.debug('Request Body: ' + body);
+    
+            req.setBody(body);
+    
+            Http http = new Http();
+            HttpResponse res = http.send(req);
+    
+            System.debug('Response Status Code: ' + res.getStatusCode());
+            System.debug('Response Body: ' + res.getBody());
+    
+            String messageId;
+            String deliveryStatus;
+            String statusGroup;
+            String statusDescription;
+            String toNumber;
+    
+            // =====================================================
+            // PARSE INFOBIP RESPONSE
+            // =====================================================
+    
+            if (res.getStatusCode() == 200 || res.getStatusCode() == 201) {
+    
+                Map<String, Object> responseMap =
+                    (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+    
+                // Direct Root Level Fields
+                messageId = (String) responseMap.get('messageId');
+                toNumber = (String) responseMap.get('to');
+    
+                System.debug('messageId: ' + messageId);
+                System.debug('toNumber: ' + toNumber);
+    
+                // Status Object
+                if (responseMap.containsKey('status')) {
+    
+                    Map<String, Object> statusMap =
+                        (Map<String, Object>) responseMap.get('status');
+    
+                    deliveryStatus = (String) statusMap.get('name');
+                    statusGroup = (String) statusMap.get('groupName');
+                    statusDescription = (String) statusMap.get('description');
+    
+                    System.debug('deliveryStatus: ' + deliveryStatus);
+                    System.debug('statusGroup: ' + statusGroup);
+                    System.debug('statusDescription: ' + statusDescription);
+                }
+            }
+    
+            // =====================================================
+            // INSERT SALESFORCE RECORD
+            // =====================================================
+    
+            WhatsApp_Messages__c msg = new WhatsApp_Messages__c(
+    
+                Contact__c = contactId,
+                Phone__c = phone,
+                Messaged_To__c = phone,
+                Message_Text__c = message,
+                Direction__c = 'Outbound',
+                Message_Id__c = messageId,
+                Message_Delivery_Status__c = deliveryStatus,
+                //Message_Status_Group__c = statusGroup,
+                // Message_Status_Description__c = statusDescription,
+                Messaging_Product__c = 'WHATSAPP',
+                Delivered_At__c = System.now()
+            );
+    
+            System.debug('msg Before Insert: ' + msg);
+    
+            insert msg;
+    
+            System.debug('--------------------------------msg inserted--------------------------------');
+    
+        } catch (Exception e) {
+    
+            System.debug('Send Message Using Infobip Error: ' + e.getMessage());
+    
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+
+
+
+
     /*
     @AuraEnabled
-    public static void sendMessageUsingInfobip(String phone, String message) {
+    public static void sendMessageUsingInfobip(String phone, String message, Id contactId) {
         // Infobip API call
+
+        System.debug('################## sendMessageUsingInfobip() Executed ##################');
+        System.debug('phone: ' + phone);
+        System.debug('message: ' + message);
+        System.debug('contactId: ' + contactId);
+
+        try {
+
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('https://8vrkpd.api.infobip.com/whatsapp/1/message/text');
+        req.setEndpoint('https://rk382y.api-in.infobip.com/whatsapp/1/message/text');
         req.setMethod('POST');
 
-        req.setHeader('Authorization', 'App f80ee10b2aa4fd71fe5a6dfa61434581-64ea5958-889a-4d4a-9041-65fe006c45d7');
+        req.setHeader('Authorization', 'App e4f7246c76fe62841697c0923eb1d0fe-b647ca14-03e9-46d5-9f4d-70261a9987f3');
         req.setHeader('Content-Type', 'application/json');
 
         String body = JSON.serialize(new Map<String, Object>{
-            'from' => '447860088970', // your Infobip sender
+            'from' => '447860099299', // your Infobip sender
             'to' => phone,
             'content' => new Map<String, String>{
                 'text' => message
@@ -470,10 +588,15 @@ public with sharing class WhatsAppController {
             Phone__c = phone,
             Message_Text__c = message,
             Direction__c = 'Outbound',
-            Received_At__c = System.now()
+            Received_At__c = System.now(),
+            Contact__c = contactId
         );
 
-        insert msg;
+            insert msg;
+        } catch (Exception e) {
+            System.debug('Send Message Using Infobip Error: ' + e.getMessage());
+            throw new AuraHandledException(e.getMessage());
+        }
     }
-	*/
+    */
 }

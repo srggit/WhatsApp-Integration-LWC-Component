@@ -2,6 +2,7 @@ import { LightningElement, track, api } from 'lwc';
 import getContact from '@salesforce/apex/WhatsAppController.getContact';
 import getMessages from '@salesforce/apex/WhatsAppController.getMessages';
 import sendMessage from '@salesforce/apex/WhatsAppController.sendMessage';
+import sendMessageUsingInfobip from '@salesforce/apex/WhatsAppController.sendMessageUsingInfobip';
 import getLastSeen from '@salesforce/apex/WhatsAppController.getLastSeen';
 
 import { subscribe, unsubscribe } from 'lightning/empApi';
@@ -415,6 +416,7 @@ export default class WhatsappChat extends LightningElement {
         if (textarea) textarea.value = '';
 
         // Send API call using Meta API
+        /*
         sendMessage({
             phone: this.selectedContact.Phone,
             message: messageToSend,
@@ -457,6 +459,52 @@ export default class WhatsappChat extends LightningElement {
                 // this.renderMessages();
                 this.showToast('Error', 'Message failed to send', 'error');
             });
+        */
+
+        // Send API call using Infobip API
+        sendMessageUsingInfobip({
+            phone: this.selectedContact.Phone,
+            message: messageToSend,
+            contactId: this.selectedContact.Id
+        })
+            .then(() => {
+                console.log('Message sent successfully');
+                // Just update the status, don't reload all messages
+                // this.messages = this.messages.map(msg => {
+                //     if (msg.Id === tempId) {
+                //         return {
+                //             ...msg,
+                //             Message_Delivery_Status__c: 'sent',
+                //             statusLabel: 'Sent',
+                //             statusIcon: '✓'
+                //         };
+                //     }
+                //     return msg;
+                // });
+                // // this.renderMessages();
+
+                // // Optional: reload after 3 seconds to get the real message ID (without clearing UI)
+                // setTimeout(() => {
+                //     this.smartReload(tempId);
+                // }, 3000);
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                this.messages = this.messages.map(msg => {
+                    if (msg.Id === tempId) {
+                        return {
+                            ...msg,
+                            Message_Delivery_Status__c: 'failed',
+                            statusLabel: 'Failed',
+                            statusIcon: '⚠️'
+                        };
+                    }
+                    return msg;
+                });
+                // this.renderMessages();
+                this.showToast('Error', 'Message failed to send', 'error');
+            });
+
     }
 
     // Smart reload - only add messages that don't already exist
